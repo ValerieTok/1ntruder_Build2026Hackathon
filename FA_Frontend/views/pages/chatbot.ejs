@@ -1,30 +1,92 @@
-<section class="page-hero compact">
-  <h1><%= page.heading %></h1>
-  <p><%= page.description %></p>
+<section class="training-page" data-training-dashboard>
+  <div class="training-intro">
+    <p class="section-label">RedFlag training simulator</p>
+    <h1>Choose a challenge</h1>
+    <p>Practise spotting common scam tactics in safe, realistic scenarios.</p>
+  </div>
+
+  <div class="challenge-grid" aria-label="Training challenges">
+    <button class="challenge-card active" type="button" data-training-challenge="Job Scam">
+      <span class="challenge-icon icon-job" aria-hidden="true"></span><strong>Job Scam</strong><small>Best: 80 <span aria-hidden="true">&#9733;</span></small>
+    </button>
+    <button class="challenge-card" type="button" data-training-challenge="Bank Scam">
+      <span class="challenge-icon icon-bank" aria-hidden="true"></span><strong>Bank Scam</strong><small>Best: 90 <span aria-hidden="true">&#9733;</span></small>
+    </button>
+    <button class="challenge-card" type="button" data-training-challenge="Parcel Scam">
+      <span class="challenge-icon icon-parcel" aria-hidden="true"></span><strong>Parcel Scam</strong><small>Best: 70 <span aria-hidden="true">&#9733;</span></small>
+    </button>
+    <button class="challenge-card" type="button" data-training-challenge="Investment Scam">
+      <span class="challenge-icon icon-investment" aria-hidden="true"></span><strong>Investment Scam</strong><small>Best: 60 <span aria-hidden="true">&#9733;</span></small>
+    </button>
+    <button class="challenge-card" type="button" data-training-challenge="Romance Scam">
+      <span class="challenge-icon icon-romance" aria-hidden="true"></span><strong>Romance Scam</strong><small>Best: 75 <span aria-hidden="true">&#9733;</span></small>
+    </button>
+  </div>
+
+  <section class="training-progress" aria-live="polite">
+    <div>
+      <p class="training-progress-kicker">Selected challenge</p>
+      <h2 data-selected-challenge>Job Scam</h2>
+      <p>Learn the tell-tale red flags before making a decision.</p>
+      <button class="training-start" type="button" data-start-training>Start challenge <span aria-hidden="true">&rarr;</span></button>
+    </div>
+    <div class="training-level">
+      <span class="training-trophy" aria-hidden="true">&#9733;</span>
+      <p><strong>Level 1</strong><br>Rookie Scam Spotter</p>
+      <span class="training-points">0 / 2000 XP</span>
+      <span class="training-meter"><span></span></span>
+    </div>
+    <div class="training-flag" aria-hidden="true"><span>!</span></div>
+  </section>
 </section>
 
-<section class="content-section two-column">
-  <article class="chatbot-panel">
-    <h2>Chat With SparkleBot</h2>
-    <div
-      id="sparklebot-webchat"
-      class="webchat-box"
-      data-bot-name="<%= botpress.botName %>"
-    >
-      <div class="webchat-loading">
-        <p>Loading SparkleBot...</p>
-      </div>
-    </div>
-  </article>
+<section class="training-game hidden" data-training-game>
+  <div class="training-game-header">
+    <button class="training-back" type="button" data-training-back aria-label="Back to challenges">&larr;</button>
+    <div><p>Challenge: <strong data-game-challenge>Job Scam</strong></p><span>1 / 5</span></div>
+    <span class="game-progress" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+  </div>
 
-  <aside class="card">
-    <h2>Example Questions</h2>
-    <ul class="check-list">
-      <% questions.forEach((question) => { %>
-        <li><%= question %></li>
-      <% }) %>
-    </ul>
-  </aside>
+  <main class="training-game-content">
+    <p class="game-instruction">Click on all the <strong>red flags</strong> in the message below.</p>
+    <article class="telegram-simulation" aria-label="Telegram job scam simulation">
+      <header class="telegram-header"><span class="telegram-avatar" aria-hidden="true">&#10148;</span><span><strong>Recruiter</strong><small>last seen recently</small></span><span class="telegram-actions" aria-hidden="true">&#9742; &nbsp; &#8942;</span></header>
+      <div class="telegram-chat">
+        <div class="telegram-message">
+          <p>Hi! We found your profile on JobStreet.</p>
+          <p>We have a part-time job you can do from home and earn <button type="button" class="red-flag" data-red-flag>$500/day!</button></p>
+          <p>No experience required.</p>
+          <p>Contact us on <button type="button" class="red-flag" data-red-flag>Telegram: @FastCash123</button></p>
+          <p>You only need to pay a <button type="button" class="red-flag" data-red-flag>$30 registration fee</button> to get started.</p>
+          <p><button type="button" class="red-flag" data-red-flag>Limited slots! Reply now</button> before it is too late!</p>
+        </div>
+      </div>
+      <footer class="telegram-compose"><span aria-hidden="true">&#9786;</span><span>Message</span><b aria-hidden="true">&#128206;</b><i aria-hidden="true">&#8593;</i></footer>
+    </article>
+    <p class="training-tip"><strong>Tip:</strong> Look out for urgency, money requests, suspicious links, and unverified platforms.</p>
+    <p class="training-score hidden" data-training-score aria-live="polite"></p>
+    <button class="training-submit" type="button" data-submit-score>I’m done! Check my score <span aria-hidden="true">&rarr;</span></button>
+    <aside class="training-results hidden" data-training-results aria-live="polite">
+      <section class="result-summary">
+        <span class="result-emoji" aria-hidden="true">&#128517;</span>
+        <p class="result-label">JOB SCAM</p>
+        <h2 data-result-heading>Nice work spotting the red flags.</h2>
+        <p>You found <span data-result-found>0</span> of 4 red flags</p>
+        <strong class="result-points"><span data-result-points>0</span><small>/ 100</small></strong>
+      </section>
+      <section class="result-review missed-flags">
+        <p class="result-label">MISSED FLAGS (<span data-missed-count>4</span>)</p>
+        <article data-review-item="0"><h3>Unrealistic $500/day salary</h3><p>No legitimate job pays $500/day for unskilled remote work. This is bait to get your attention.</p></article>
+        <article data-review-item="1"><h3>Redirects to Telegram</h3><p>Moving to Telegram removes accountability and makes the person harder to trace and report.</p></article>
+        <article data-review-item="2"><h3>Upfront registration fee</h3><p>Legitimate employers do not ask candidates to pay to get a job. This is the core of the scam.</p></article>
+        <article data-review-item="3"><h3>Urgency and limited slots</h3><p>Pressure to reply immediately is designed to stop you from thinking or verifying the offer.</p></article>
+      </section>
+      <section class="result-review result-extra">
+        <p class="result-label">ALSO WORTH KNOWING</p>
+        <article><h3>No company name mentioned</h3><p>Real recruiters identify their company upfront. Anonymity is a deliberate choice by scammers.</p></article>
+      </section>
+    </aside>
+  </main>
 </section>
 
 <% if (botpress.webchatInjectUrl) { %>

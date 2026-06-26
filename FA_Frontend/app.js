@@ -30,5 +30,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`SparkleBot is running at http://localhost:${PORT}`);
+  console.log(`RedFlag is running at http://localhost:${PORT}`);
 });

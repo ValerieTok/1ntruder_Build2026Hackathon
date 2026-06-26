@@ -8,20 +8,20 @@ if (navToggle && navLinks) {
 }
 
 const screenshotInput = document.getElementById("screenshotInput");
+const screenshotPreview = document.getElementById("screenshotPreview");
+const screenshotPreviewCard = document.getElementById("screenshotPreviewCard");
 
-if (screenshotInput) {
+if (screenshotInput && screenshotPreview && screenshotPreviewCard) {
   screenshotInput.addEventListener("change", () => {
     const file = screenshotInput.files[0];
-    const preview = document.getElementById("screenshotPreview");
-    const previewCard = document.getElementById("screenshotPreviewCard");
 
     if (!file) {
-      previewCard.classList.add("hidden");
+      screenshotPreviewCard.classList.add("hidden");
       return;
     }
 
-    preview.src = URL.createObjectURL(file);
-    previewCard.classList.remove("hidden");
+    screenshotPreview.src = URL.createObjectURL(file);
+    screenshotPreviewCard.classList.remove("hidden");
   });
 }
 
@@ -42,3 +42,53 @@ document.querySelectorAll("[data-analysis-form]").forEach((form) => {
     }
   });
 });
+
+const checkerModes = document.querySelectorAll("[data-checker-mode]");
+const checkerPanels = document.querySelectorAll("[data-checker-panel]");
+const checkerFileInput = document.getElementById("screenshotInput");
+const selectedFile = document.querySelector("[data-selected-file]");
+const imageDropzone = document.querySelector(".image-dropzone");
+
+checkerModes.forEach((button) => {
+  button.addEventListener("click", () => {
+    const mode = button.dataset.checkerMode;
+
+    checkerModes.forEach((item) => item.classList.toggle("active", item === button));
+    checkerPanels.forEach((panel) => {
+      panel.classList.toggle("hidden", panel.dataset.checkerPanel !== mode);
+    });
+  });
+});
+
+function showSelectedFile() {
+  const file = checkerFileInput && checkerFileInput.files[0];
+  if (!file || !selectedFile) return;
+
+  selectedFile.textContent = `Selected: ${file.name}`;
+  selectedFile.classList.remove("hidden");
+}
+
+if (checkerFileInput) {
+  checkerFileInput.addEventListener("change", showSelectedFile);
+}
+
+if (imageDropzone && checkerFileInput) {
+  ["dragenter", "dragover"].forEach((eventName) => {
+    imageDropzone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      imageDropzone.classList.add("dragging");
+    });
+  });
+
+  ["dragleave", "drop"].forEach((eventName) => {
+    imageDropzone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      imageDropzone.classList.remove("dragging");
+    });
+  });
+
+  imageDropzone.addEventListener("drop", (event) => {
+    checkerFileInput.files = event.dataTransfer.files;
+    showSelectedFile();
+  });
+}

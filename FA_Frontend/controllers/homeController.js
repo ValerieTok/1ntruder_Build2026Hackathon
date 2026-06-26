@@ -3,7 +3,7 @@ const featureModel = require("../models/featureModel");
 
 exports.showHome = (req, res) => {
   res.render("layout", {
-    title: "SparkleBot",
+    title: "RedFlag",
     currentPage: "home",
     page: pageModel.getPage("home"),
     features: featureModel.getFeatures(),

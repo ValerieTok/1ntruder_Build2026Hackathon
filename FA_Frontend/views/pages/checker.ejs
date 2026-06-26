@@ -1,39 +1,67 @@
-<section class="page-hero compact">
-  <h1><%= page.heading %></h1>
-  <p><%= page.description %></p>
-</section>
+<section class="checker-page">
+  <div class="checker-heading">
+    <h1>Scam detector</h1>
+    <p>Paste a message or upload a screenshot — AI analyses it for red flags and gives a risk score.</p>
+  </div>
 
-<section class="tool-panel">
-  <form class="form-card" action="/checker" method="POST" data-analysis-form>
-    <label for="messageInput">Suspicious message</label>
-    <textarea
-      id="messageInput"
-      name="message"
-      rows="8"
-      placeholder="Paste the suspicious SMS, WhatsApp message, email, or job offer here..."
-      required
-    ><%= submittedMessage %></textarea>
-    <button class="btn btn-primary" type="submit">Check Message</button>
-    <div class="analysis-loading hidden" data-analysis-loading role="status" aria-live="polite">
-      <span class="loading-spinner" aria-hidden="true"></span>
-      <span>Analyzing message… This may take a few seconds.</span>
-    </div>
-  </form>
+  <div class="checker-layout">
+    <form class="form-card checker-form" action="/checker" method="POST" enctype="multipart/form-data" data-analysis-form>
+      <p class="form-kicker">What do you want to check?</p>
 
-  <% if (errorMessage) { %>
-    <article class="result-card">
-      <h2>Analysis Error</h2>
-      <p><%= errorMessage %></p>
-    </article>
-  <% } %>
+      <div class="checker-mode-switch" role="group" aria-label="Choose content type">
+        <button class="checker-mode active" type="button" data-checker-mode="text">↗&nbsp; Paste text</button>
+        <button class="checker-mode" type="button" data-checker-mode="image">▧&nbsp; Upload image</button>
+      </div>
 
-  <% if (analysis) { %>
-    <article class="result-card" aria-live="polite">
-      <h2>Scam Risk Analysis</h2>
-      <p><strong>Risk Level:</strong> <%= analysis.riskLevel %></p>
-      <p><strong>Possible Scam Type:</strong> <%= analysis.scamType %></p>
-      <p><strong>Red Flags:</strong> <%= analysis.redFlags.length ? analysis.redFlags.join(", ") : "None returned" %></p>
-      <p><strong>Recommended Action:</strong> <%= analysis.recommendedAction %></p>
-    </article>
-  <% } %>
+      <div class="checker-mode-panel" data-checker-panel="text">
+        <label for="messageInput">Message, email, listing, or link</label>
+        <textarea id="messageInput" name="message" rows="6" placeholder="Paste the suspicious text or URL here..."><%= submittedMessage %></textarea>
+      </div>
+
+      <div class="checker-mode-panel hidden" data-checker-panel="image">
+        <label class="image-dropzone" for="screenshotInput">
+          <span class="image-dropzone-icon" aria-hidden="true">▧</span>
+          <strong>Drop an image here or click to browse</strong>
+          <small>Screenshots of messages, emails, texts, or websites</small>
+        </label>
+        <input id="screenshotInput" name="screenshot" type="file" accept="image/*">
+        <p class="selected-file hidden" data-selected-file></p>
+      </div>
+
+      <label for="contextInput">Additional context <span>(optional)</span></label>
+      <textarea id="contextInput" name="context" rows="3" placeholder="Any extra context about this message or image, e.g. 'received via WhatsApp'"><%= submittedContext %></textarea>
+
+      <button class="btn btn-primary checker-submit" type="submit">⌁&nbsp; Analyse for scam signals</button>
+      <div class="analysis-loading hidden" data-analysis-loading role="status" aria-live="polite">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <span>Scanning for red flags…</span>
+      </div>
+    </form>
+
+    <aside class="checker-result-panel" aria-live="polite">
+      <% if (errorMessage) { %>
+        <article class="result-card checker-result-card">
+          <h2>Analysis Error</h2>
+          <p><%= errorMessage %></p>
+        </article>
+      <% } else if (analysis) { %>
+        <article class="result-card checker-result-card">
+          <h2>Scam Risk Analysis</h2>
+          <p><strong>Risk Level:</strong> <%= analysis.riskLevel %></p>
+          <p><strong>Possible Scam Type:</strong> <%= analysis.scamType %></p>
+          <p><strong>Red Flags:</strong> <%= analysis.redFlags.length ? analysis.redFlags.join(", ") : "None returned" %></p>
+          <p><strong>Recommended Action:</strong> <%= analysis.recommendedAction %></p>
+        </article>
+      <% } else { %>
+        <div class="checker-empty-state">
+          <span class="checker-empty-icon" aria-hidden="true">⌁</span>
+          <p>Analysis results will appear here</p>
+        </div>
+      <% } %>
+
+      <% if (uploadedImage) { %>
+        <img class="checker-image-preview" src="<%= uploadedImage %>" alt="Uploaded screenshot preview">
+      <% } %>
+    </aside>
+  </div>
 </section>

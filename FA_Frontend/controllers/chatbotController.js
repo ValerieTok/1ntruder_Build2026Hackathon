@@ -2,7 +2,7 @@ const pageModel = require("../models/pageModel");
 function getBotpressConfig() {
   return {
     botId: process.env.BOTPRESS_BOT_ID || "",
-    botName: "SparkleBot",
+    botName: "RedFlag",
     webchatInjectUrl: process.env.BOTPRESS_WEBCHAT_INJECT_URL || "",
     webchatConfigUrl: process.env.BOTPRESS_WEBCHAT_CONFIG_URL || ""
   };
@@ -10,7 +10,7 @@ function getBotpressConfig() {
 
 exports.showChatbot = (req, res) => {
   res.render("layout", {
-    title: "AI Chatbot",
+    title: "Scam Training Simulator",
     currentPage: "chatbot",
     page: pageModel.getPage("chatbot"),
     questions: pageModel.getChatbotQuestions(),

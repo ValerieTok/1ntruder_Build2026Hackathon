@@ -1,9 +1,9 @@
 const pages = {
   home: {
-    heading: "SparkleBot",
-    tagline: "Think Before You Click",
+    heading: "RedFlag",
+    tagline: "Your AI-powered scam detection companion.",
     description:
-      "An AI-powered anti-scam portal that helps users check suspicious messages, review screenshots, and get practical scam guidance from SparkleBot."
+      "An AI-powered anti-scam portal that helps users check suspicious messages, review screenshots, and get practical scam guidance."
   },
   checker: {
     heading: "Message Checker",
@@ -16,14 +16,14 @@ const pages = {
       "Upload a screenshot of a suspicious message or website, extract the text, and send it to Botpress for scam risk analysis."
   },
   chatbot: {
-    heading: "AI Chatbot",
+    heading: "Scam Training Simulator",
     description:
-      "Ask SparkleBot about suspicious messages, scam warning signs, and safer next steps."
+      "Practise identifying scam warning signs in safe, realistic scenarios."
   },
   about: {
     heading: "About AI",
     description:
-      "SparkleBot combines practical web tools with modern AI concepts for scam education and safer decision-making."
+      "RedFlag combines practical web tools with modern AI concepts for scam education and safer decision-making."
   }
 };
 

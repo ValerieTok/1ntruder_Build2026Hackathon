@@ -1,7 +1,7 @@
 {
   "name": "sparklebot",
   "version": "1.0.0",
-  "description": "SparkleBot AI-powered anti-scam web application.",
+  "description": "RedFlag AI-powered anti-scam web application.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

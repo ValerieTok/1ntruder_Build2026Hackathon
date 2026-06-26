@@ -1,29 +1,45 @@
-<section class="hero">
-  <div class="hero-layout">
-    <div class="hero-content">
-      <p class="eyebrow">AI-powered anti-scam portal</p>
-      <h1><%= page.heading %></h1>
-      <p class="tagline"><%= page.tagline %></p>
-      <p class="hero-description"><%= page.description %></p>
+<section class="home-hero">
+  <div class="home-hero-inner">
+    <div class="home-hero-copy">
+      <p class="hero-pill">AI-powered scam protection</p>
+      <h1>Spot scams.<br><span>Stop scammers.</span></h1>
+      <p class="home-hero-description">Train yourself, detect threats, check suspicious content, and get help if you have been scammed. All in one AI-powered platform.</p>
+      <div class="hero-actions">
+        <a class="hero-secondary hero-explore" href="#features">Explore features <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <p class="hero-note">Built by 1ntruder. Stay safer online, every day.</p>
     </div>
-    <div class="hero-logo-card">
-      <img src="/images/sparklebot-logo.png" alt="SparkleBot logo: Protect. Detect. Prevent.">
+    <div class="hero-visual" aria-hidden="true">
+      <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+      <div class="hero-shield"><span>&#10003;</span></div>
+      <div class="hero-bubble bubble-top"><b>Too good to be true?</b><span>Trust, but verify.</span></div>
+      <div class="hero-bubble bubble-left"><b>Suspicious message?</b><span>We will check it.</span></div>
+      <div class="hero-bubble bubble-right"><b>Not sure about a link?</b><span>Check it first.</span></div>
+      <div class="hero-bubble bubble-bottom"><b>Been scammed?</b><span>We will guide you step by step.</span></div>
     </div>
   </div>
 </section>
 
-<section class="content-section">
-  <div class="section-heading">
-    <h2>Core Features</h2>
-    <p>Three focused tools to help users inspect suspicious content and act safely.</p>
+<section class="redflag-features" id="features">
+  <div class="redflag-section-heading">
+    <p class="section-label">Stay scam-safe</p>
+    <h2>Everything you need to spot a scam</h2>
+    <p>Simple AI tools for checking suspicious content, learning scam patterns, and taking the right next step.</p>
   </div>
-  <div class="card-grid">
+  <div class="redflag-feature-grid">
     <% features.forEach((feature) => { %>
-      <a class="card feature-card" href="<%= feature.link %>">
+      <a class="redflag-feature-card <%= feature.tone %>" href="<%= feature.link %>">
+        <span class="redflag-feature-icon icon-<%= feature.icon %>" aria-hidden="true"></span>
         <h3><%= feature.title %></h3>
         <p><%= feature.description %></p>
-        <span class="text-link"><%= feature.buttonText %></span>
+        <span class="redflag-feature-action"><%= feature.action %> <span aria-hidden="true">&rarr;</span></span>
       </a>
     <% }) %>
+  </div>
+  <div class="redflag-values" id="how-it-works">
+    <div><span>Safe</span><p><strong>Your safety comes first</strong><small>Clear guidance for every situation</small></p></div>
+    <div><span>AI</span><p><strong>AI-powered</strong><small>Smart detection and guidance</small></p></div>
+    <div><span>Lock</span><p><strong>Privacy first</strong><small>Your content stays protected</small></p></div>
+    <div><span>Learn</span><p><strong>Always learning</strong><small>Improving to protect you better</small></p></div>
   </div>
 </section>

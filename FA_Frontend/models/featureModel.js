@@ -1,21 +1,35 @@
 const features = [
   {
-    title: "Message Checker",
-    description: "Paste a suspicious message and receive a scam risk analysis with warning signs and safer next steps.",
-    link: "/checker",
-    buttonText: "Check a Message"
-  },
-  {
-    title: "Screenshot Review",
-    description: "Upload a suspicious screenshot, extract its text, and receive a scam risk analysis.",
-    link: "/upload",
-    buttonText: "Upload Screenshot"
-  },
-  {
-    title: "AI Scam Guidance",
-    description: "Chat with a Botpress assistant connected to scam safety knowledge.",
+    title: "Scam training simulator",
+    description: "Chat through realistic scam scenarios and build confidence spotting common tactics.",
     link: "/chatbot",
-    buttonText: "Ask SparkleBot"
+    icon: "simulator",
+    tone: "coral",
+    action: "Start training"
+  },
+  {
+    title: "Scam detector",
+    description: "Paste a message, email, listing, link, or screenshot to get a clear risk assessment.",
+    link: "/checker",
+    icon: "detector",
+    tone: "orange",
+    action: "Check now"
+  },
+  {
+    title: "Link checker",
+    description: "Check suspicious links before clicking and understand the risks behind them.",
+    link: "/checker",
+    icon: "link",
+    tone: "blue",
+    action: "Check link"
+  },
+  {
+    title: "Recovery guide",
+    description: "Get practical, step-by-step guidance when you think you have been scammed.",
+    link: "/chatbot",
+    icon: "recovery",
+    tone: "green",
+    action: "Get help"
   }
 ];
 
