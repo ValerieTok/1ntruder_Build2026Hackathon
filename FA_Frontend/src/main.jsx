@@ -411,11 +411,17 @@ function Alerts() {
       </section>
       <section className="alert-grid">
         {visibleAlerts.map((alert) => (
-          <article className="alert-card" key={alert.id}>
-            <div className="alert-card-header"><div><h2 className="alert-title">{alert.title}</h2><p className="alert-metadata"><span>Reported: {alert.reportedDate}</span></p></div><span className={`status-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span></div>
-            <div className="alert-category">{alert.category}</div>
-            <div className="alert-copy"><p>{alert.description}</p></div>
-            <div className="alert-lists"><div><strong>Warning Signs:</strong><ul>{alert.warningSigns.map((item) => <li key={item}>{item}</li>)}</ul></div><div><strong>Recommended Actions:</strong><ul>{alert.recommendedActions.map((item) => <li key={item}>{item}</li>)}</ul></div></div>
+          <article className="alert-card-modern" key={alert.id}>
+            <div className="alert-card-content">
+              <div className="alert-card-badges">
+                <span className="alert-category-badge">{alert.category}</span>
+                <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
+              </div>
+              <h2 className="alert-card-title">{alert.title}</h2>
+              <p className="alert-card-date">Reported: {alert.reportedDate}</p>
+              <p>{alert.description}</p>
+              <div className="alert-lists"><div><strong>Warning Signs:</strong><ul>{alert.warningSigns.map((item) => <li key={item}>{item}</li>)}</ul></div><div><strong>Recommended Actions:</strong><ul>{alert.recommendedActions.map((item) => <li key={item}>{item}</li>)}</ul></div></div>
+            </div>
           </article>
         ))}
       </section>
