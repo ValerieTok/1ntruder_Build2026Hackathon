@@ -487,7 +487,6 @@ function Alerts() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
   const [sort, setSort] = useState('recent')
-  const [selectedAlert, setSelectedAlert] = useState(null)
   const stats = getSummaryStats()
   const visibleAlerts = useMemo(() => {
     const riskOrder = { High: 3, Medium: 2, Low: 1 }
@@ -522,7 +521,7 @@ function Alerts() {
           <div className="alerts-empty-state">No alerts found. Adjust your search or filters.</div>
         ) : visibleAlerts.map((alert) => (
           <article className="alert-card-modern" key={alert.id}>
-            <button className="alert-card-link" type="button" onClick={() => setSelectedAlert(alert)}>
+            <Link className="alert-card-link" href={`/alerts/${alert.id}`}>
               <div className="alert-card-image">
                 <img src={alert.image} alt={alert.title} loading="lazy" />
               </div>
@@ -535,7 +534,7 @@ function Alerts() {
                 <p className="alert-card-date">Reported: {alert.reportedDate}</p>
                 <span className="alert-read-more">Read More <span aria-hidden="true">-&gt;</span></span>
               </div>
-            </button>
+            </Link>
           </article>
         ))}
       </section>
@@ -543,34 +542,56 @@ function Alerts() {
         <section className="trends-panel"><h3>Latest Scam Trends</h3><ul className="trend-list">{trends.map((trend) => <li key={trend}>{trend}</li>)}</ul></section>
         <section className="tips-panel"><h3>Safety Tips</h3><ul className="tips-list">{safetyTips.map((tip) => <li key={tip}><span>✓</span> {tip}</li>)}</ul></section>
       </div>
-      {selectedAlert && <AlertDetailModal alert={selectedAlert} onClose={() => setSelectedAlert(null)} />}
     </section>
   )
 }
 
-function AlertDetailModal({ alert, onClose }) {
+function AlertArticlePage({ alertId }) {
+  const alert = alerts.find((item) => item.id === alertId)
+
+  if (!alert) return <NotFound />
+
   return (
-    <div className="alert-detail-modal" onClick={(event) => event.target === event.currentTarget && onClose()}>
-      <div className="alert-detail-content">
-        <button className="alert-detail-close" type="button" onClick={onClose} aria-label="Close detail view">×</button>
-        <div className="alert-detail-body">
-          <img src={alert.image} alt={alert.title} className="alert-detail-image" />
-          <div className="alert-detail-header">
-            <div>
-              <h2 className="alert-detail-title">{alert.title}</h2>
-              <div className="alert-detail-meta">
-                <span>Reported: {alert.reportedDate}</span>
-                <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
-                <span className="alert-category-badge">{alert.category}</span>
-              </div>
-            </div>
+    <section className="scam-article-page">
+      <nav className="article-breadcrumb" aria-label="Breadcrumb">
+        <Link href="/alerts">Scam Alerts</Link>
+        <span aria-hidden="true">/</span>
+        <span>{alert.title}</span>
+      </nav>
+      <article className="scam-article">
+        <main className="article-main">
+          <img className="article-feature-image" src={alert.image} alt={alert.title} />
+          <div className="article-badges">
+            <span className="alert-category-badge">{alert.category}</span>
+            <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
           </div>
-          <div className="alert-detail-section"><p>{alert.description}</p></div>
-          <div className="alert-detail-section"><h3>Warning Signs</h3><ul>{alert.warningSigns.map((item) => <li key={item}>{item}</li>)}</ul></div>
-          <div className="alert-detail-section"><h3>Recommended Actions</h3><ul>{alert.recommendedActions.map((item) => <li key={item}>{item}</li>)}</ul></div>
-        </div>
-      </div>
-    </div>
+          <header className="article-header">
+            <h1>{alert.title}</h1>
+            <div className="article-meta"><span>Reported: {alert.reportedDate}</span></div>
+          </header>
+          <div className="article-body">
+            <p>{alert.description}</p>
+            <h2>Warning Signs</h2>
+            <ul>{alert.warningSigns.map((item) => <li key={item}>{item}</li>)}</ul>
+            <h2>Recommended Actions</h2>
+            <ol>{alert.recommendedActions.map((item) => <li key={item}>{item}</li>)}</ol>
+          </div>
+        </main>
+        <aside className="article-sidebar">
+          <section className="sidebar-block">
+            <h3>Need to check something?</h3>
+            <ul className="sidebar-actions">
+              <li><Link href="/checker">Open scam detector</Link></li>
+              <li><Link href="/chatbot?mode=recovery">Get recovery help</Link></li>
+            </ul>
+          </section>
+          <section className="sidebar-block">
+            <h3>Safety reminders</h3>
+            <ul className="sidebar-list">{safetyTips.map((tip) => <li key={tip}>{tip}</li>)}</ul>
+          </section>
+        </aside>
+      </article>
+    </section>
   )
 }
 
@@ -597,7 +618,7 @@ function App() {
     document.body.className = `page-${currentPage}`
   }, [currentPage])
 
-  const page = path === '/' ? <Home /> : path === '/checker' ? <Checker /> : path === '/chatbot' ? <Chatbot /> : path === '/alerts' ? <Alerts /> : path === '/about' ? <About /> : <NotFound />
+  const page = path === '/' ? <Home /> : path === '/checker' ? <Checker /> : path === '/chatbot' ? <Chatbot /> : path === '/alerts' ? <Alerts /> : path.startsWith('/alerts/') ? <AlertArticlePage alertId={decodeURIComponent(path.split('/')[2] || '')} /> : path === '/about' ? <About /> : <NotFound />
 
   return (
     <>
