@@ -1,5 +1,6 @@
 {
-  "buildCommand": "npm run build",
+  "installCommand": "npm install --prefix FA_Frontend",
+  "buildCommand": "npm run build --prefix FA_Frontend",
   "outputDirectory": "FA_Frontend/dist",
   "framework": "vite",
   "rewrites": [
