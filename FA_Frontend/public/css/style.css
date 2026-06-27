@@ -405,6 +405,17 @@ h1 {
 .checker-submit {
   width: 100%;
   background: var(--blue-900);
+  gap: 9px;
+}
+
+.button-spinner {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 2px solid rgba(255, 255, 255, 0.42);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: loading-spin 700ms linear infinite;
 }
 
 .checker-result-panel {

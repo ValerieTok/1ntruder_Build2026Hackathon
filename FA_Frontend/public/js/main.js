@@ -34,11 +34,11 @@ document.querySelectorAll("[data-analysis-form]").forEach((form) => {
 
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = "Analysing...";
+      submitButton.innerHTML = '<span class="button-spinner" aria-hidden="true"></span><span>Analysing...</span>';
     }
 
     if (loadingIndicator) {
-      loadingIndicator.classList.remove("hidden");
+      loadingIndicator.classList.add("hidden");
     }
   });
 });
