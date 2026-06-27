@@ -52,7 +52,7 @@ function Header({ currentPage }) {
           <li><Link className={currentPage === 'home' ? 'active' : ''} href="/">Home</Link></li>
           <li><Link href="/#features">Features</Link></li>
           <li><Link href="/#how-it-works">How It Works</Link></li>
-          <li><Link className={currentPage === 'chatbot' ? 'active' : ''} href="/chatbot">Get Help</Link></li>
+          <li><Link className={currentPage === 'chatbot' ? 'active' : ''} href="/chatbot?mode=recovery">Get Help</Link></li>
           <li><Link className="nav-cta" href="/checker">Get Started</Link></li>
         </ul>
       </nav>
@@ -126,18 +126,33 @@ function Home() {
 function Checker() {
   const [mode, setMode] = useState('text')
   const [message, setMessage] = useState('')
+  const [link, setLink] = useState('')
   const [context, setContext] = useState('')
   const [image, setImage] = useState(null)
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('')
   const [analysis, setAnalysis] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!image) {
+      setImagePreviewUrl('')
+      return
+    }
+
+    const objectUrl = URL.createObjectURL(image)
+    setImagePreviewUrl(objectUrl)
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [image])
 
   async function submit(event) {
     event.preventDefault()
     setError('')
     setAnalysis(null)
 
-    if (!message.trim() && !context.trim()) {
+    const submittedMessage = mode === 'link' ? link : message
+
+    if (!submittedMessage.trim() && !context.trim()) {
       setError('Paste suspicious text, a link, or context before running analysis. Image OCR is not enabled in the React/Vercel version yet.')
       return
     }
@@ -147,7 +162,7 @@ function Checker() {
       const response = await fetch('/api/checker', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, context }),
+        body: JSON.stringify({ message: submittedMessage, context, inputType: mode }),
       })
       const payload = await response.json()
       if (!response.ok) throw new Error(payload.error || 'Analysis failed.')
@@ -163,19 +178,25 @@ function Checker() {
     <section className="checker-page">
       <div className="checker-heading">
         <h1>Scam detector</h1>
-        <p>Paste a message or upload a screenshot preview. Text analysis is sent to the connected Botpress chatbot.</p>
+        <p>Paste text, check a link, or upload a screenshot preview. Text and links are analysed by the connected Botpress checker.</p>
       </div>
       <div className="checker-layout">
         <form className="form-card checker-form" onSubmit={submit}>
           <p className="form-kicker">What do you want to check?</p>
           <div className="checker-mode-switch" role="group" aria-label="Choose content type">
             <button className={`checker-mode ${mode === 'text' ? 'active' : ''}`} type="button" onClick={() => setMode('text')}>↗ Paste text</button>
+            <button className={`checker-mode ${mode === 'link' ? 'active' : ''}`} type="button" onClick={() => setMode('link')}>⌁ Paste link</button>
             <button className={`checker-mode ${mode === 'image' ? 'active' : ''}`} type="button" onClick={() => setMode('image')}>▧ Upload image</button>
           </div>
           {mode === 'text' ? (
             <div className="checker-mode-panel">
               <label htmlFor="messageInput">Message, email, listing, or link</label>
               <textarea id="messageInput" rows="6" placeholder="Paste the suspicious text or URL here..." value={message} onChange={(event) => setMessage(event.target.value)} />
+            </div>
+          ) : mode === 'link' ? (
+            <div className="checker-mode-panel">
+              <label htmlFor="linkInput">Suspicious link</label>
+              <input id="linkInput" type="url" placeholder="https://example.com/suspicious-page" value={link} onChange={(event) => setLink(event.target.value)} />
             </div>
           ) : (
             <div className="checker-mode-panel">
@@ -199,28 +220,26 @@ function Checker() {
         <aside className="checker-result-panel" aria-live="polite">
           {error && <article className="result-card checker-result-card"><h2>Analysis Error</h2><p>{error}</p></article>}
           {analysis && (
-            <article className="result-card checker-result-card">
+            <article className={`result-card checker-result-card risk-${String(analysis.riskLevel || '').toLowerCase()}`}>
               <h2>Scam Risk Analysis</h2>
-              <p><strong>Risk Level:</strong> {analysis.riskLevel}</p>
+              <p><strong>Risk Level:</strong> <span className="risk-badge">{analysis.riskLevel}</span></p>
               <p><strong>Possible Scam Type:</strong> {analysis.scamType}</p>
-              <p><strong>Red Flags:</strong> {analysis.redFlags?.length ? analysis.redFlags.join(', ') : 'None returned'}</p>
-              <p><strong>Recommended Action:</strong> {analysis.recommendedAction}</p>
+              <div className="analysis-points"><strong>Red Flags:</strong>{analysis.redFlags?.length ? <ul>{analysis.redFlags.map((flag) => <li key={flag}>{flag}</li>)}</ul> : <p>None returned</p>}</div>
+              <div className="analysis-points"><strong>Recommended Action:</strong><ul>{String(analysis.recommendedAction || '').split(/\n|(?<=\.)\s+(?=[A-Z])/).map((action) => action.trim()).filter(Boolean).map((action) => <li key={action}>{action}</li>)}</ul></div>
             </article>
           )}
           {!error && !analysis && <div className="checker-empty-state"><span className="checker-empty-icon" aria-hidden="true">⌁</span><p>Analysis results will appear here</p></div>}
-          {image && <img className="checker-image-preview" src={URL.createObjectURL(image)} alt="Uploaded screenshot preview" />}
+          {imagePreviewUrl && <img className="checker-image-preview" src={imagePreviewUrl} alt="Uploaded screenshot preview" />}
         </aside>
       </div>
     </section>
   )
 }
 
-function Chatbot() {
-  const isRecovery = new URLSearchParams(window.location.search).get('mode') === 'recovery'
+function BotpressPanel({ recovery = false }) {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (!isRecovery || ready) return
     for (const src of [webchatInjectUrl, webchatConfigUrl].filter(Boolean)) {
       if (document.querySelector(`script[src="${src}"]`)) continue
       const script = document.createElement('script')
@@ -228,11 +247,31 @@ function Chatbot() {
       script.defer = true
       document.body.appendChild(script)
     }
+
     const timer = setInterval(() => {
       if (window.botpress?.open) setReady(true)
     }, 250)
+
     return () => clearInterval(timer)
-  }, [isRecovery, ready])
+  }, [])
+
+  const configured = Boolean(webchatInjectUrl || webchatConfigUrl)
+
+  return (
+    <section className={`chatbot-panel ${recovery ? 'recovery-chat-panel' : ''}`} aria-label={recovery ? 'Botpress recovery chatbot' : 'Botpress chatbot'}>
+      <div className="webchat-box">
+        <div className="webchat-loading">
+          <p>{ready ? (recovery ? 'RedFlag recovery guide is ready.' : 'RedFlag chatbot is ready.') : configured ? 'Loading RedFlag chatbot...' : 'Configure VITE_BOTPRESS_WEBCHAT_INJECT_URL and VITE_BOTPRESS_WEBCHAT_CONFIG_URL in Vercel to load webchat.'}</p>
+          <p className="form-note">{recovery ? 'Ask: I think I have been scammed.' : 'Ask about suspicious messages, scam warning signs, or what to do next.'}</p>
+          <button className="btn btn-primary" type="button" onClick={() => window.botpress?.open?.()} disabled={!ready}>{recovery ? 'Open recovery chat' : 'Open RedFlag chat'}</button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Chatbot() {
+  const isRecovery = new URLSearchParams(window.location.search).get('mode') === 'recovery'
 
   if (isRecovery) {
     return (
@@ -254,15 +293,7 @@ function Chatbot() {
             </ol>
             <p className="form-note">For Singapore scams, call the 24/7 ScamShield Helpline at 1799 if you are unsure what to do next.</p>
           </section>
-          <section className="chatbot-panel recovery-chat-panel" aria-label="Botpress recovery chatbot">
-            <div className="webchat-box">
-              <div className="webchat-loading">
-                <p>{ready ? 'RedFlag recovery guide is ready.' : 'Configure VITE_BOTPRESS_WEBCHAT_INJECT_URL and VITE_BOTPRESS_WEBCHAT_CONFIG_URL in Vercel to load webchat.'}</p>
-                <p className="form-note">Ask: I think I have been scammed.</p>
-                <button className="btn btn-primary" type="button" onClick={() => window.botpress?.open?.()} disabled={!ready}>Open recovery chat</button>
-              </div>
-            </div>
-          </section>
+          <BotpressPanel recovery />
         </div>
       </section>
     )
@@ -331,35 +362,44 @@ function Training() {
   }
 
   return (
-    <section className="training-page">
-      <div className="training-intro">
-        <p className="section-label">RedFlag training simulator</p>
-        <h1>Choose a challenge</h1>
-        <p>Practise spotting common scam tactics in safe, realistic scenarios.</p>
-      </div>
-      <div className="challenge-grid" aria-label="Training challenges">
-        {challenges.map((item) => (
-          <button key={item} className={`challenge-card ${challenge === item ? 'active' : ''}`} type="button" onClick={() => { setChallenge(item); setGame(true) }}>
-            <span className={`challenge-icon icon-${item.split(' ')[0].toLowerCase()}`} aria-hidden="true"></span><strong>{item}</strong><small>Best: 80 <span aria-hidden="true">★</span></small>
-          </button>
-        ))}
-      </div>
-      <section className="training-progress" aria-live="polite">
-        <div>
-          <p className="training-progress-kicker">Selected challenge</p>
-          <h2>{challenge}</h2>
-          <p>Learn the tell-tale red flags before making a decision.</p>
-          <button className="training-start" type="button" onClick={() => setGame(true)}>Start challenge <span aria-hidden="true">-&gt;</span></button>
+    <>
+      <section className="training-page">
+        <div className="training-intro">
+          <p className="section-label">RedFlag training simulator</p>
+          <h1>Choose a challenge</h1>
+          <p>Practise spotting common scam tactics in safe, realistic scenarios.</p>
         </div>
-        <div className="training-level">
-          <span className="training-trophy" aria-hidden="true">★</span>
-          <p><strong>Level 1</strong><br />Rookie Scam Spotter</p>
-          <span className="training-points">0 / 2000 XP</span>
-          <span className="training-meter"><span></span></span>
+        <div className="challenge-grid" aria-label="Training challenges">
+          {challenges.map((item) => (
+            <button key={item} className={`challenge-card ${challenge === item ? 'active' : ''}`} type="button" onClick={() => { setChallenge(item); setGame(true) }}>
+              <span className={`challenge-icon icon-${item.split(' ')[0].toLowerCase()}`} aria-hidden="true"></span><strong>{item}</strong><small>Best: 80 <span aria-hidden="true">★</span></small>
+            </button>
+          ))}
         </div>
-        <div className="training-flag" aria-hidden="true"><span>!</span></div>
+        <section className="training-progress" aria-live="polite">
+          <div>
+            <p className="training-progress-kicker">Selected challenge</p>
+            <h2>{challenge}</h2>
+            <p>Learn the tell-tale red flags before making a decision.</p>
+            <button className="training-start" type="button" onClick={() => setGame(true)}>Start challenge <span aria-hidden="true">-&gt;</span></button>
+          </div>
+          <div className="training-level">
+            <span className="training-trophy" aria-hidden="true">★</span>
+            <p><strong>Level 1</strong><br />Rookie Scam Spotter</p>
+            <span className="training-points">0 / 2000 XP</span>
+            <span className="training-meter"><span></span></span>
+          </div>
+          <div className="training-flag" aria-hidden="true"><span>!</span></div>
+        </section>
       </section>
-    </section>
+      <section className="content-section">
+        <div className="section-heading">
+          <h2>Ask RedFlag</h2>
+          <p>Use the chatbot for scam questions, suspicious messages, and next-step guidance.</p>
+        </div>
+        <BotpressPanel />
+      </section>
+    </>
   )
 }
 
