@@ -25,6 +25,7 @@ router.post("/checker", (req, res) => {
 router.get("/upload", uploadController.showUpload);
 router.get("/chatbot", chatbotController.showChatbot);
 router.get("/alerts", scamAlertsController.showAlerts);
+router.get("/alerts/:slug", scamAlertsController.showAlertArticle);
 router.get("/about", aboutController.showAbout);
 
 module.exports = router;

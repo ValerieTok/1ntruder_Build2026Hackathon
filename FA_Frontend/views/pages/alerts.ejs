@@ -60,7 +60,7 @@
           </div>
           <h2 class="alert-card-title"><%= alert.title %></h2>
           <p class="alert-card-date">Reported: <%= alert.reportedDate %></p>
-          <button class="alert-read-more" data-alert-id="<%= alert.id %>" type="button">Read More <span aria-hidden="true">→</span></button>
+          <a class="alert-read-more" href="/alerts/<%= alert.slug || alert.id %>">Read More <span aria-hidden="true">→</span></a>
         </div>
       </article>
     <% }) %>

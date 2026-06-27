@@ -1,0 +1,115 @@
+<section class="scam-article-page">
+  <nav class="article-breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span>/</span>
+    <a href="/alerts">Scam Alerts</a>
+    <span>/</span>
+    <span><%= article.title %></span>
+  </nav>
+
+  <article class="scam-article">
+    <div class="article-main">
+      <img class="article-feature-image" src="<%= article.image %>" alt="<%= article.title %>">
+
+      <div class="article-badges">
+        <span class="alert-category-badge"><%= article.category %></span>
+        <span class="alert-risk-badge <%= article.risk.toLowerCase() %>"><%= article.risk %> Risk</span>
+      </div>
+
+      <header class="article-header">
+        <h1><%= article.articleHeadline %></h1>
+        <div class="article-meta">
+          <span>Published: <%= article.reportedDate %></span>
+          <span><%= article.readTime %></span>
+          <span><%= article.views.toLocaleString() %> views</span>
+          <span>By <%= article.author %></span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <h2>Overview</h2>
+        <% article.articleContent.overview.forEach((paragraph) => { %>
+          <p><%= paragraph %></p>
+        <% }) %>
+
+        <h2>How the Scam Works</h2>
+        <% article.articleContent.howItWorks.forEach((paragraph) => { %>
+          <p><%= paragraph %></p>
+        <% }) %>
+
+        <% if (article.articleContent.steps && article.articleContent.steps.length) { %>
+          <ol>
+            <% article.articleContent.steps.forEach((step) => { %>
+              <li><%= step %></li>
+            <% }) %>
+          </ol>
+        <% } %>
+
+        <h2>Warning Signs</h2>
+        <ul>
+          <% article.articleContent.warningSigns.forEach((sign) => { %>
+            <li><%= sign %></li>
+          <% }) %>
+        </ul>
+
+        <h2>How to Protect Yourself</h2>
+        <ul>
+          <% article.articleContent.protectionTips.forEach((tip) => { %>
+            <li><%= tip %></li>
+          <% }) %>
+        </ul>
+
+        <h2>What To Do If You Have Been Scammed</h2>
+        <ol>
+          <% article.articleContent.whatToDo.forEach((step) => { %>
+            <li><%= step %></li>
+          <% }) %>
+        </ol>
+
+        <h2>Official Resources</h2>
+        <ul class="resource-links">
+          <% article.articleContent.resources.forEach((resource) => { %>
+            <li><a href="<%= resource.url %>" target="_blank" rel="noreferrer"><%= resource.label %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="article-sidebar">
+      <div class="sidebar-block">
+        <h3>About this Scam</h3>
+        <ul class="sidebar-list">
+          <li><strong>Category:</strong> <%= article.category %></li>
+          <li><strong>Risk Level:</strong> <%= article.risk %></li>
+          <li><strong>Published:</strong> <%= article.reportedDate %></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-block">
+        <h3>Share Article</h3>
+        <ul class="sidebar-actions">
+          <li><a href="#">Copy Link</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">Email</a></li>
+        </ul>
+      </div>
+    </aside>
+  </article>
+
+  <section class="article-related">
+    <h2>Related Scam Alerts</h2>
+    <div class="related-grid">
+      <% relatedAlerts.forEach((related) => { %>
+        <a class="related-card" href="/alerts/<%= related.slug %>">
+          <img src="<%= related.image %>" alt="<%= related.title %>">
+          <div class="related-card-body">
+            <h3><%= related.title %></h3>
+            <p>Published: <%= related.reportedDate %></p>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+</section>
