@@ -26,6 +26,8 @@ router.get("/upload", uploadController.showUpload);
 router.get("/chatbot", chatbotController.showChatbot);
 router.get("/alerts", scamAlertsController.showAlerts);
 router.get("/alerts/:slug", scamAlertsController.showAlertArticle);
+router.get("/api/scam-alerts", scamAlertsController.getAlertsApi);
+router.get("/api/scam-alerts/:slug", scamAlertsController.getAlertApi);
 router.get("/about", aboutController.showAbout);
 
 module.exports = router;

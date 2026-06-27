@@ -2,15 +2,12 @@
   "name": "sparklebot",
   "version": "1.0.0",
   "description": "RedFlag AI-powered anti-scam web application.",
+  "type": "commonjs",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "keywords": [
-    "express",
-    "ejs",
-    "anti-scam"
-  ],
+  "keywords": ["express", "ejs", "anti-scam"],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -20,9 +17,13 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "json5": "^2.2.3",
-    "multer": "^2.2.0"
+    "multer": "^2.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "@vitejs/plugin-react": "^4.3.4",
+    "nodemon": "^3.1.4",
+    "vite": "^6.0.5"
   }
 }

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "fake-bank-sms",
+    "slug": "fake-bank-sms",
+    "title": "Fake Bank SMS",
+    "articleHeadline": "Fake Bank SMS Scams Continue to Target Customers",
+    "reportedDate": "Today",
+    "readTime": "3 min read",
+    "views": 15342,
+    "author": "Scam Advisory Team",
+    "risk": "High",
+    "category": "Banking",
+    "description": "Scammers impersonate bank notifications and ask victims to click a fake login link.",
+    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=450&fit=crop",
+    "warningSigns": [
+      "Urgent payment request",
+      "Suspicious login link",
+      "Unknown sender"
+    ],
+    "recommendedActions": [
+      "Do not click the link",
+      "Verify with the official banking app",
+      "Report the message"
+    ],
+    "articleContent": {
+      "overview": [
+        "Bank impersonation messages are one of the most common scam formats used to create urgency.",
+        "They try to trick users into sharing credentials or OTP codes by mimicking legitimate service messages."
+      ],
+      "howItWorks": [
+        "Scammers send a message that appears to come from a reputable bank.",
+        "The message prompts users to click a link or enter login details on a fake page."
+      ],
+      "steps": [
+        "A message claims an account issue or payment problem.",
+        "The user is directed to a fraudulent webpage.",
+        "Credentials or authorization codes are collected by the scammer."
+      ],
+      "warningSigns": [
+        "Unexpected login request",
+        "Urgent threats to close the account",
+        "Poor grammar or spelling mistakes"
+      ],
+      "protectionTips": [
+        "Type the bank's official website directly into your browser.",
+        "Never share OTPs or passwords.",
+        "Contact the bank using a verified phone number."
+      ],
+      "whatToDo": [
+        "Stop interacting with the sender.",
+        "Contact your bank immediately.",
+        "Preserve any evidence and report the scam."
+      ],
+      "resources": [
+        {
+          "label": "ScamShield",
+          "url": "https://www.scamshield.gov.sg/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "recruitment-fee-job-scam",
+    "slug": "recruitment-fee-job-scam",
+    "title": "Recruitment Fee Job Scam",
+    "articleHeadline": "Fake Recruiters Ask for Upfront Fees Before Interviews",
+    "reportedDate": "Yesterday",
+    "readTime": "4 min read",
+    "views": 10470,
+    "author": "Scam Advisory Team",
+    "risk": "Medium",
+    "category": "Job",
+    "description": "Fake job offers ask candidates to pay recruitment fees before scheduling interviews.",
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=450&fit=crop",
+    "warningSigns": [
+      "Upfront payment requested",
+      "Unsolicited job offer",
+      "Non-corporate email address"
+    ],
+    "recommendedActions": [
+      "Do not pay any fee.",
+      "Confirm company details.",
+      "Use official job portals."
+    ],
+    "articleContent": {
+      "overview": [
+        "Job scams often promise high salaries and fast hiring timelines.",
+        "They ask candidates to pay fees for background checks or application processing."
+      ],
+      "howItWorks": [
+        "Fraudsters reach out with a job offer that seems too good to be true.",
+        "They ask for money before the candidate can move forward."
+      ],
+      "steps": [
+        "A candidate receives an unsolicited offer.",
+        "The recruiter asks for payment to continue.",
+        "The job offer disappears after payment is made."
+      ],
+      "warningSigns": [
+        "Job offered without interview.",
+        "Payment requested for paperwork.",
+        "Vague company details."
+      ],
+      "protectionTips": [
+        "Verify employers on trusted platforms.",
+        "Never send money for job applications.",
+        "Research the company before engaging."
+      ],
+      "whatToDo": [
+        "Stop contact with the recruiter.",
+        "Report the scheme to the authorities.",
+        "Warn others about the scam."
+      ],
+      "resources": [
+        {
+          "label": "Singapore Police Force",
+          "url": "https://www.police.gov.sg/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "crypto-investment-pitch",
+    "slug": "crypto-investment-pitch",
+    "title": "Crypto Investment Pitch",
+    "articleHeadline": "Crypto Investment Scam Promises Guaranteed Returns",
+    "reportedDate": "2 days ago",
+    "readTime": "4 min read",
+    "views": 21450,
+    "author": "Scam Advisory Team",
+    "risk": "High",
+    "category": "Investment",
+    "description": "A social media ad promises quick crypto returns and asks users to fund a wallet.",
+    "image": "https://images.unsplash.com/photo-1621761191319-c6fb62b63ef5?w=800&h=450&fit=crop",
+    "warningSigns": [
+      "Guaranteed returns",
+      "Unknown wallet address",
+      "Pressure to act fast"
+    ],
+    "recommendedActions": [
+      "Research before investing.",
+      "Avoid unknown crypto wallets.",
+      "Report the post to the platform."
+    ],
+    "articleContent": {
+      "overview": [
+        "Investment scams are often shared through social media or messaging apps.",
+        "They promise large profits with little or no risk."
+      ],
+      "howItWorks": [
+        "Scammers entice users with impressive returns.",
+        "Victims are directed to transfer funds to a wallet they control."
+      ],
+      "steps": [
+        "A targeted ad or message offers a crypto opportunity.",
+        "The victim sends money to a suspicious wallet.",
+        "The scammer disappears and the funds are lost."
+      ],
+      "warningSigns": [
+        "Too-good-to-be-true profits.",
+        "Urgent investment deadline.",
+        "Requests for payment in cryptocurrency."
+      ],
+      "protectionTips": [
+        "Verify investment platforms carefully.",
+        "Avoid high-pressure offers.",
+        "Never send funds to unknown wallets."
+      ],
+      "whatToDo": [
+        "Stop all communication.",
+        "Contact your bank or wallet provider.",
+        "Report the scam to the platform."
+      ],
+      "resources": [
+        {
+          "label": "Cyber Security Agency",
+          "url": "https://www.csa.gov.sg/"
+        }
+      ]
+    }
+  }
+]
