@@ -459,13 +459,6 @@ function Training() {
           <div className="training-flag" aria-hidden="true"><span>!</span></div>
         </section>
       </section>
-      <section className="content-section">
-        <div className="section-heading">
-          <h2>Ask RedFlag</h2>
-          <p>Use the chatbot for scam questions, suspicious messages, and next-step guidance.</p>
-        </div>
-        <BotpressPanel />
-      </section>
     </>
   )
 }
