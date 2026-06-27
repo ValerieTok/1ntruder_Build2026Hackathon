@@ -1,21 +1,30 @@
 <section class="checker-page">
   <div class="checker-heading">
     <h1>Scam detector</h1>
-    <p>Paste a message or upload a screenshot — AI analyses it for red flags and gives a risk score.</p>
+    <p>Paste text, check a link, or upload a screenshot — OpenAI analyses it for red flags and gives a risk score.</p>
   </div>
 
   <div class="checker-layout">
     <form class="form-card checker-form" action="/checker" method="POST" enctype="multipart/form-data" data-analysis-form>
+      <input type="hidden" name="source" value="redflag-checker">
+      <input type="hidden" name="instruction" value="Check this submission for scams. Identify scam signals, risk level, red flags, and recommended actions.">
+      <input type="hidden" name="inputType" value="text" data-input-type>
       <p class="form-kicker">What do you want to check?</p>
 
       <div class="checker-mode-switch" role="group" aria-label="Choose content type">
         <button class="checker-mode active" type="button" data-checker-mode="text">↗&nbsp; Paste text</button>
+        <button class="checker-mode" type="button" data-checker-mode="link">⌁&nbsp; Paste link</button>
         <button class="checker-mode" type="button" data-checker-mode="image">▧&nbsp; Upload image</button>
       </div>
 
       <div class="checker-mode-panel" data-checker-panel="text">
-        <label for="messageInput">Message, email, listing, or link</label>
-        <textarea id="messageInput" name="message" rows="6" placeholder="Paste the suspicious text or URL here..."><%= submittedMessage %></textarea>
+        <label for="messageInput">Message, email, or listing</label>
+        <textarea id="messageInput" name="message" rows="6" placeholder="Paste the suspicious text here..."><%= submittedMessage %></textarea>
+      </div>
+
+      <div class="checker-mode-panel hidden" data-checker-panel="link">
+        <label for="linkInput">Suspicious link</label>
+        <input id="linkInput" name="link" type="url" placeholder="https://example.com/suspicious-page" value="<%= submittedLink %>">
       </div>
 
       <div class="checker-mode-panel hidden" data-checker-panel="image">
@@ -26,15 +35,18 @@
         </label>
         <input id="screenshotInput" name="screenshot" type="file" accept="image/*">
         <p class="selected-file hidden" data-selected-file></p>
+        <div id="screenshotPreviewCard" class="checker-upload-preview hidden">
+          <img id="screenshotPreview" src="" alt="Selected screenshot preview">
+        </div>
       </div>
 
-      <label for="contextInput">Additional context <span>(optional)</span></label>
-      <textarea id="contextInput" name="context" rows="3" placeholder="Any extra context about this message or image, e.g. 'received via WhatsApp'"><%= submittedContext %></textarea>
+      <label for="contextInput">Additional notes <span>(optional)</span></label>
+      <textarea id="contextInput" name="context" rows="3" placeholder="Any extra notes about this message, link, or image, e.g. 'received via WhatsApp'"><%= submittedContext %></textarea>
 
-      <button class="btn btn-primary checker-submit" type="submit">⌁&nbsp; Analyse for scam signals</button>
+      <button class="btn btn-primary checker-submit" type="submit">⌁&nbsp; Analyse</button>
       <div class="analysis-loading hidden" data-analysis-loading role="status" aria-live="polite">
         <span class="loading-spinner" aria-hidden="true"></span>
-        <span>Scanning for red flags…</span>
+        <span>Analysing...</span>
       </div>
     </form>
 
@@ -45,22 +57,37 @@
           <p><%= errorMessage %></p>
         </article>
       <% } else if (analysis) { %>
-        <article class="result-card checker-result-card">
+        <% const riskTone = String(analysis.riskLevel || "").toLowerCase(); %>
+        <article class="result-card checker-result-card risk-<%= riskTone %>">
           <h2>Scam Risk Analysis</h2>
-          <p><strong>Risk Level:</strong> <%= analysis.riskLevel %></p>
+          <p><strong>Risk Level:</strong> <span class="risk-badge"><%= analysis.riskLevel %></span></p>
           <p><strong>Possible Scam Type:</strong> <%= analysis.scamType %></p>
-          <p><strong>Red Flags:</strong> <%= analysis.redFlags.length ? analysis.redFlags.join(", ") : "None returned" %></p>
-          <p><strong>Recommended Action:</strong> <%= analysis.recommendedAction %></p>
+          <div class="analysis-points">
+            <strong>Red Flags:</strong>
+            <% if (analysis.redFlags.length) { %>
+              <ul>
+                <% analysis.redFlags.forEach((flag) => { %>
+                  <li><%= flag %></li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p>None returned</p>
+            <% } %>
+          </div>
+          <div class="analysis-points">
+            <strong>Recommended Action:</strong>
+            <ul>
+              <% String(analysis.recommendedAction || "").split(/\n|(?<=\.)\s+(?=[A-Z])/).map((action) => action.trim()).filter(Boolean).forEach((action) => { %>
+                <li><%= action %></li>
+              <% }) %>
+            </ul>
+          </div>
         </article>
       <% } else { %>
         <div class="checker-empty-state">
           <span class="checker-empty-icon" aria-hidden="true">⌁</span>
           <p>Analysis results will appear here</p>
         </div>
-      <% } %>
-
-      <% if (uploadedImage) { %>
-        <img class="checker-image-preview" src="<%= uploadedImage %>" alt="Uploaded screenshot preview">
       <% } %>
     </aside>
   </div>

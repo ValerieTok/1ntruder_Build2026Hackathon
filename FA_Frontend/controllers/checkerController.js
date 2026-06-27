@@ -1,6 +1,5 @@
 const pageModel = require("../models/pageModel");
-const botpressService = require("../services/botpressService");
-const geminiService = require("../services/geminiService");
+const openaiService = require("../services/openaiService");
 
 function renderCheckerPage(res, options = {}) {
   res.render("layout", {
@@ -8,6 +7,7 @@ function renderCheckerPage(res, options = {}) {
     currentPage: "checker",
     page: pageModel.getPage("checker"),
     submittedMessage: options.submittedMessage || "",
+    submittedLink: options.submittedLink || "",
     submittedContext: options.submittedContext || "",
     uploadedImage: options.uploadedImage || null,
     analysis: options.analysis || null,
@@ -25,36 +25,35 @@ exports.showCheckerError = (res, errorMessage) => {
 };
 
 exports.analyzeContent = async (req, res) => {
-  const submittedMessage = (req.body.message || "").trim();
+  const inputType = ["text", "link", "image"].includes(req.body.inputType) ? req.body.inputType : "text";
+  const submittedMessage = inputType === "text" ? (req.body.message || "").trim() : "";
+  const submittedLink = inputType === "link" ? (req.body.link || "").trim() : "";
   const submittedContext = (req.body.context || "").trim();
-  const uploadedImage = req.file ? `/uploads/${req.file.filename}` : null;
+  const instruction = (req.body.instruction || "").trim();
+  const imageFile = inputType === "image" ? req.file : null;
+  const uploadedImage = imageFile ? `/uploads/${imageFile.filename}` : null;
 
-  if (!submittedMessage && !req.file) {
+  if (!submittedMessage && !submittedLink && !imageFile) {
     renderCheckerPage(res, {
-      errorMessage: "Paste some text or a link, upload an image, or provide both."
+      submittedContext,
+      errorMessage: "Paste text, paste a link, or upload an image before analysing."
     });
     return;
   }
 
   try {
-    const extractedText = req.file
-      ? await geminiService.extractTextFromImage(req.file.path, req.file.mimetype)
-      : "";
-    const contentToAnalyze = [submittedMessage, extractedText, submittedContext].filter(Boolean).join("\n\n");
-
-    if (!contentToAnalyze) {
-      renderCheckerPage(res, {
-        uploadedImage,
-        submittedContext,
-        errorMessage: "No readable text was found in the uploaded image."
-      });
-      return;
-    }
-
-    const analysis = await botpressService.analyzeMessage(contentToAnalyze);
+    const analysis = await openaiService.analyzeSubmission({
+      instruction,
+      message: submittedMessage,
+      link: submittedLink,
+      context: submittedContext,
+      imagePath: imageFile?.path,
+      imageMimeType: imageFile?.mimetype
+    });
 
     renderCheckerPage(res, {
       submittedMessage,
+      submittedLink,
       submittedContext,
       uploadedImage,
       analysis
@@ -64,9 +63,10 @@ exports.analyzeContent = async (req, res) => {
 
     renderCheckerPage(res, {
       submittedMessage,
+      submittedLink,
       submittedContext,
       uploadedImage,
-      errorMessage: botpressService.getFriendlyBotpressError(error)
+      errorMessage: openaiService.getFriendlyOpenAIError(error)
     });
   }
 };

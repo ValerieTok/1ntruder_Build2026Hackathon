@@ -34,7 +34,7 @@ document.querySelectorAll("[data-analysis-form]").forEach((form) => {
 
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = "Analyzing…";
+      submitButton.textContent = "Analysing...";
     }
 
     if (loadingIndicator) {
@@ -48,17 +48,32 @@ const checkerPanels = document.querySelectorAll("[data-checker-panel]");
 const checkerFileInput = document.getElementById("screenshotInput");
 const selectedFile = document.querySelector("[data-selected-file]");
 const imageDropzone = document.querySelector(".image-dropzone");
+const inputType = document.querySelector("[data-input-type]");
+
+function setActiveCheckerMode(mode) {
+  checkerModes.forEach((item) => item.classList.toggle("active", item.dataset.checkerMode === mode));
+  checkerPanels.forEach((panel) => {
+    const isActive = panel.dataset.checkerPanel === mode;
+    panel.classList.toggle("hidden", !isActive);
+    panel.querySelectorAll("input, textarea, select").forEach((field) => {
+      field.disabled = !isActive;
+    });
+  });
+
+  if (inputType) {
+    inputType.value = mode;
+  }
+}
 
 checkerModes.forEach((button) => {
   button.addEventListener("click", () => {
-    const mode = button.dataset.checkerMode;
-
-    checkerModes.forEach((item) => item.classList.toggle("active", item === button));
-    checkerPanels.forEach((panel) => {
-      panel.classList.toggle("hidden", panel.dataset.checkerPanel !== mode);
-    });
+    setActiveCheckerMode(button.dataset.checkerMode);
   });
 });
+
+if (checkerModes.length) {
+  setActiveCheckerMode(inputType?.value || "text");
+}
 
 function showSelectedFile() {
   const file = checkerFileInput && checkerFileInput.files[0];

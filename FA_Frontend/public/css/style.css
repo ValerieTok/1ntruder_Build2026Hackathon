@@ -267,7 +267,7 @@ h1 {
 
 .checker-layout {
   display: grid;
-  grid-template-columns: minmax(290px, 0.92fr) minmax(340px, 1.35fr);
+  grid-template-columns: minmax(430px, 1.25fr) minmax(320px, 1fr);
   gap: 20px;
   align-items: stretch;
 }
@@ -304,7 +304,7 @@ h1 {
 
 .checker-mode-switch {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-bottom: 14px;
   overflow: hidden;
   border: 1px solid #cfd7e2;
@@ -320,6 +320,7 @@ h1 {
   font: inherit;
   font-size: 0.88rem;
   font-weight: 800;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -386,6 +387,21 @@ h1 {
   font-weight: 700;
 }
 
+.checker-upload-preview {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid var(--grey-200);
+  border-radius: 10px;
+  background: #f7faff;
+}
+
+.checker-upload-preview img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+}
+
 .checker-submit {
   width: 100%;
   background: var(--blue-900);
@@ -423,10 +439,74 @@ h1 {
 }
 
 .checker-image-preview {
+  width: 100%;
   max-width: 100%;
-  max-height: 210px;
+  max-height: 360px;
+  object-fit: contain;
   border: 1px solid var(--grey-200);
   border-radius: 10px;
+  background: #f7faff;
+}
+
+.checker-result-card {
+  border-left: 6px solid #8996a8;
+}
+
+.checker-result-card .risk-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #243248;
+  background: #eef2f7;
+  font-weight: 800;
+}
+
+.checker-result-card.risk-high {
+  border-left-color: #d92d20;
+}
+
+.checker-result-card.risk-high .risk-badge {
+  color: #7a1a12;
+  background: #fee4e2;
+}
+
+.checker-result-card.risk-medium {
+  border-left-color: #f79009;
+}
+
+.checker-result-card.risk-medium .risk-badge {
+  color: #7a4a00;
+  background: #fef0c7;
+}
+
+.checker-result-card.risk-low {
+  border-left-color: #12b76a;
+}
+
+.checker-result-card.risk-low .risk-badge {
+  color: #05603a;
+  background: #d1fadf;
+}
+
+.analysis-points {
+  margin-top: 12px;
+}
+
+.analysis-points strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.analysis-points ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--grey-700);
+}
+
+.analysis-points li {
+  margin-bottom: 6px;
 }
 
 .page-hero h1 {
