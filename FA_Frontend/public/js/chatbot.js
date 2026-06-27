@@ -106,21 +106,26 @@
 
   function showReadyMessage() {
     webchat.innerHTML = "";
+    const isRecoveryChat = webchat.hasAttribute("data-recovery-chat");
 
     const ready = document.createElement("div");
     ready.className = "webchat-loading";
 
     const message = document.createElement("p");
-    message.textContent = "RedFlag is ready.";
+    message.textContent = isRecoveryChat
+      ? "RedFlag recovery guide is ready."
+      : "RedFlag is ready.";
 
     const note = document.createElement("p");
     note.className = "form-note";
-    note.textContent = "Use the chat button on this page to start a conversation.";
+    note.textContent = isRecoveryChat
+      ? "Open the Botpress chat and ask what to do next. Start with: I think I have been scammed."
+      : "Use the chat button on this page to start a conversation.";
 
     const button = document.createElement("button");
     button.type = "button";
     button.className = "btn btn-primary";
-    button.textContent = "Open RedFlag";
+    button.textContent = isRecoveryChat ? "Open recovery chat" : "Open RedFlag";
     button.addEventListener("click", () => {
       if (window.botpress && typeof window.botpress.open === "function") {
         window.botpress.open();

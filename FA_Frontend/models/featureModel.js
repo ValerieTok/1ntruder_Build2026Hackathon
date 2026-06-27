@@ -26,7 +26,7 @@ const features = [
   {
     title: "Recovery guide",
     description: "Get practical, step-by-step guidance when you think you have been scammed.",
-    link: "/chatbot",
+    link: "/chatbot?mode=recovery",
     icon: "recovery",
     tone: "green",
     action: "Get help"

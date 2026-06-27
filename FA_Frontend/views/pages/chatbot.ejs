@@ -1,3 +1,30 @@
+<% if (chatbotMode === "recovery") { %>
+<section class="recovery-chat-page">
+  <div class="training-intro">
+    <p class="section-label">Recovery guide</p>
+    <h1><%= page.heading %></h1>
+    <p><%= page.description %></p>
+  </div>
+
+  <div class="recovery-layout">
+    <section class="recovery-guide-panel" aria-label="Immediate recovery steps">
+      <p class="result-label">FIRST STEPS</p>
+      <h2>If you may have been scammed, act fast.</h2>
+      <ol class="recovery-steps">
+        <li><strong>Contact your bank immediately</strong> to block cards, freeze accounts, or activate the bank's anti-scam controls.</li>
+        <li><strong>File a police report</strong> online or at a nearby police post. Call 999 for urgent assistance.</li>
+        <li><strong>Secure your accounts</strong> by changing passwords, enabling two-factor authentication, and warning contacts if an account was taken over.</li>
+        <li><strong>Report the scam on the platform</strong> where it happened and keep screenshots, phone numbers, account details, links, receipts, and chat logs.</li>
+      </ol>
+      <p class="form-note">For Singapore scams, call the 24/7 ScamShield Helpline at 1799 if you are unsure what to do next.</p>
+    </section>
+
+    <section class="chatbot-panel recovery-chat-panel" aria-label="Botpress recovery chatbot">
+      <div id="sparklebot-webchat" class="webchat-box" data-recovery-chat></div>
+    </section>
+  </div>
+</section>
+<% } else { %>
 <section class="training-page" data-training-dashboard>
   <div class="training-intro">
     <p class="section-label">RedFlag training simulator</p>
@@ -88,6 +115,7 @@
     </aside>
   </main>
 </section>
+<% } %>
 
 <% if (botpress.webchatInjectUrl) { %>
   <script src="<%= botpress.webchatInjectUrl %>"></script>

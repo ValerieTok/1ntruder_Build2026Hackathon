@@ -20,6 +20,11 @@ const pages = {
     description:
       "Practise identifying scam warning signs in safe, realistic scenarios."
   },
+  recovery: {
+    heading: "Scam Recovery Guide",
+    description:
+      "Get step-by-step support through the connected Botpress chatbot if you think you have been scammed."
+  },
   about: {
     heading: "About AI",
     description:
