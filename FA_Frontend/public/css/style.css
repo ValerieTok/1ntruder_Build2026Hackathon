@@ -235,6 +235,32 @@ h1 {
   color: var(--blue-900);
 }
 
+.page-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  margin: 0 0 18px;
+  padding: 9px 14px;
+  border: 1px solid #d5ddea;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1f4f97;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 6px 14px rgba(31, 79, 151, 0.06);
+  cursor: pointer;
+}
+
+.page-back-button:hover,
+.page-back-button:focus-visible {
+  border-color: #b8c9e6;
+  background: #f7faff;
+  outline: none;
+}
+
 .content-section,
 .tool-panel,
 .page-hero {
@@ -1818,5 +1844,290 @@ textarea {
 
   .related-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .site-main {
+    min-height: calc(100vh - 120px);
+  }
+
+  .navbar {
+    padding: 12px 16px;
+  }
+
+  .brand {
+    max-width: calc(100% - 88px);
+    line-height: 1.15;
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .nav-toggle {
+    min-height: 40px;
+    min-width: 72px;
+    justify-content: center;
+  }
+
+  .nav-links {
+    gap: 6px;
+    padding-top: 8px;
+  }
+
+  .nav-links a,
+  .nav-cta {
+    min-height: 44px;
+    width: 100%;
+    padding: 11px 12px !important;
+    border-radius: 10px;
+  }
+
+  .page-back-button {
+    min-height: 44px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+  }
+
+  .checker-page,
+  .training-page,
+  .recovery-chat-page,
+  .scam-alerts-page,
+  .scam-article-page,
+  .content-section,
+  .page-hero {
+    width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .home-hero {
+    padding: 92px 16px 42px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(2.4rem, 13vw, 3.6rem);
+    letter-spacing: 0;
+  }
+
+  .home-hero-description {
+    font-size: 1rem;
+  }
+
+  .hero-visual {
+    min-height: 300px;
+    transform: none;
+  }
+
+  .orbit-one {
+    width: min(86vw, 320px);
+    height: min(86vw, 320px);
+  }
+
+  .orbit-two {
+    width: min(96vw, 390px);
+    height: 170px;
+  }
+
+  .hero-shield {
+    width: 142px;
+    height: 176px;
+  }
+
+  .hero-shield span {
+    font-size: 4.1rem;
+  }
+
+  .hero-bubble {
+    width: min(42vw, 154px);
+    padding: 10px 11px;
+  }
+
+  .bubble-left {
+    left: 2px;
+  }
+
+  .bubble-right {
+    right: 2px;
+  }
+
+  .redflag-feature-grid,
+  .alert-grid,
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .redflag-feature-card {
+    min-height: 0;
+  }
+
+  .checker-layout,
+  .recovery-layout,
+  .scam-article {
+    grid-template-columns: 1fr;
+  }
+
+  .checker-form,
+  .checker-result-panel {
+    min-height: 0;
+  }
+
+  .checker-mode-switch {
+    grid-template-columns: 1fr;
+  }
+
+  .checker-mode {
+    border-right: 0;
+    border-bottom: 1px solid #cfd7e2;
+    white-space: normal;
+  }
+
+  .checker-mode:last-child {
+    border-bottom: 0;
+  }
+
+  .checker-result-panel {
+    padding: 18px;
+  }
+
+  .challenge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .challenge-card {
+    min-height: 92px;
+  }
+
+  .training-progress {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .training-game {
+    min-height: calc(100vh - 72px);
+  }
+
+  .training-game-header {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #ffffff;
+  }
+
+  .training-game-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .telegram-message {
+    max-width: 94%;
+  }
+
+  .game-progress {
+    display: none;
+  }
+
+  .scam-alerts-hero {
+    margin-bottom: 22px;
+  }
+
+  .scam-alerts-hero h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .scam-alerts-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 16px 12px;
+  }
+
+  .alerts-search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .alerts-filters {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .alerts-search-input input,
+  .alerts-filters select {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  .alert-card-modern {
+    border-radius: 12px;
+  }
+
+  .article-breadcrumb {
+    display: none;
+  }
+
+  .article-main {
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .article-feature-image {
+    border-radius: 12px;
+  }
+
+  .article-header h1 {
+    font-size: clamp(1.7rem, 8vw, 2.35rem);
+  }
+
+  .article-body p,
+  .article-body li {
+    font-size: 0.96rem;
+  }
+
+  .sidebar-block {
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .webchat-box {
+    height: 64vh;
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 420px) {
+  .checker-page,
+  .training-page,
+  .recovery-chat-page,
+  .scam-alerts-page,
+  .scam-article-page,
+  .content-section,
+  .page-hero {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .scam-alerts-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-bubble {
+    width: min(46vw, 146px);
+  }
+
+  .training-game-header {
+    grid-template-columns: 38px minmax(0, 1fr);
   }
 }

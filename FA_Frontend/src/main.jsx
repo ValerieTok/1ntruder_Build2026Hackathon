@@ -6,8 +6,18 @@ const webchatInjectUrl = import.meta.env.VITE_BOTPRESS_WEBCHAT_INJECT_URL || ''
 const webchatConfigUrl = import.meta.env.VITE_BOTPRESS_WEBCHAT_CONFIG_URL || ''
 
 function navigate(path) {
-  window.history.pushState({}, '', path)
+  window.history.pushState({ redflagApp: true }, '', path)
   window.dispatchEvent(new PopStateEvent('popstate'))
+}
+
+function goBack(fallback = '/') {
+  if (window.history.state?.redflagApp && window.history.length > 1) {
+    window.history.back()
+    return
+  }
+
+  navigate(fallback)
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 function Link({ href, className, children }) {
@@ -19,12 +29,25 @@ function Link({ href, className, children }) {
         if (href.startsWith('/')) {
           event.preventDefault()
           navigate(href)
-          window.scrollTo({ top: 0, behavior: 'smooth' })
+          const hash = href.split('#')[1]
+          if (hash) {
+            requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }
         }
       }}
     >
       {children}
     </a>
+  )
+}
+
+function BackButton({ fallback = '/', label = 'Back' }) {
+  return (
+    <button className="page-back-button" type="button" onClick={() => goBack(fallback)}>
+      <span aria-hidden="true">&lt;-</span> {label}
+    </button>
   )
 }
 
@@ -40,6 +63,11 @@ function useRoute() {
 
 function Header({ currentPage }) {
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    setOpen(false)
+  }, [currentPage])
+
   return (
     <header className="site-header">
       <nav className="navbar" aria-label="Main navigation">
@@ -176,6 +204,7 @@ function Checker() {
 
   return (
     <section className="checker-page">
+      <BackButton />
       <div className="checker-heading">
         <h1>Scam detector</h1>
         <p>Paste text, check a link, or upload a screenshot preview. Text and links are analysed by OpenAI for scam signals.</p>
@@ -343,6 +372,7 @@ function Chatbot() {
   if (isRecovery) {
     return (
       <section className="recovery-chat-page">
+        <BackButton fallback="/chatbot" />
         <div className="training-intro">
           <p className="section-label">Recovery guide</p>
           <h1>Scam Recovery Guide</h1>
@@ -431,6 +461,7 @@ function Training() {
   return (
     <>
       <section className="training-page">
+        <BackButton />
         <div className="training-intro">
           <p className="section-label">RedFlag training simulator</p>
           <h1>Choose a challenge</h1>
@@ -491,6 +522,7 @@ function Alerts() {
 
   return (
     <section className="scam-alerts-page">
+      <BackButton />
       <div className="scam-alerts-hero"><p className="section-label">Scam alerts</p><h1>Latest Scam Alerts</h1><p>Stay informed about newly reported scams and learn how to protect yourself.</p></div>
       <section className="scam-alerts-stats">
         {[[stats.today, "Today's Alerts"], [stats.active, 'Active Scams'], [stats.highRisk, 'High Risk Alerts'], [stats.weekly, 'Reported This Week']].map(([value, label]) => <article className="stat-card" key={label}><strong>{value}</strong><span>{label}</span></article>)}
@@ -546,6 +578,7 @@ function AlertArticlePage({ alertId }) {
 
   return (
     <section className="scam-article-page">
+      <BackButton fallback="/alerts" label="Back to alerts" />
       <nav className="article-breadcrumb" aria-label="Breadcrumb">
         <Link href="/alerts">Scam Alerts</Link>
         <span aria-hidden="true">/</span>
@@ -591,7 +624,7 @@ function AlertArticlePage({ alertId }) {
 function About() {
   return (
     <>
-      <section className="page-hero compact"><h1>About AI</h1><p>RedFlag combines practical web tools with modern AI concepts for scam education and safer decision-making.</p></section>
+      <section className="page-hero compact"><BackButton /><h1>About AI</h1><p>RedFlag combines practical web tools with modern AI concepts for scam education and safer decision-making.</p></section>
       <section className="content-section"><div className="section-heading"><h2>Tools Used</h2><p>These tools support chatbot creation, AI experiments, research, and development.</p></div><div className="card-grid">{tools.map((tool) => <article className="card" key={tool.name}><h3>{tool.name}</h3><p>{tool.purpose}</p></article>)}</div></section>
       <section className="content-section"><div className="section-heading"><h2>AI Structures</h2><p>Key AI concepts used in the RedFlag experience.</p></div><div className="card-grid">{aiStructures.map((item) => <article className="card" key={item.name}><h3>{item.name}</h3><p>{item.explanation}</p></article>)}</div></section>
     </>
