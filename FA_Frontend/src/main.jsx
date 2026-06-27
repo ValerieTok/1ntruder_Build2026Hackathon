@@ -238,30 +238,53 @@ function Checker() {
 
 function BotpressPanel({ recovery = false }) {
   const [ready, setReady] = useState(false)
+  const [configured, setConfigured] = useState(Boolean(webchatInjectUrl || webchatConfigUrl))
 
   useEffect(() => {
-    for (const src of [webchatInjectUrl, webchatConfigUrl].filter(Boolean)) {
-      if (document.querySelector(`script[src="${src}"]`)) continue
-      const script = document.createElement('script')
-      script.src = src
-      script.defer = true
-      document.body.appendChild(script)
+    let cancelled = false
+
+    async function loadWebchat() {
+      let urls = [webchatInjectUrl, webchatConfigUrl].filter(Boolean)
+
+      if (!urls.length) {
+        try {
+          const response = await fetch('/api/webchat-config')
+          const payload = await response.json()
+          urls = [payload.injectUrl, payload.configUrl].filter(Boolean)
+        } catch {
+          urls = []
+        }
+      }
+
+      if (cancelled) return
+      setConfigured(urls.length > 0)
+
+      for (const src of urls) {
+        if (document.querySelector(`script[src="${src}"]`)) continue
+        const script = document.createElement('script')
+        script.src = src
+        script.defer = true
+        document.body.appendChild(script)
+      }
     }
+
+    loadWebchat()
 
     const timer = setInterval(() => {
       if (window.botpress?.open) setReady(true)
     }, 250)
 
-    return () => clearInterval(timer)
+    return () => {
+      cancelled = true
+      clearInterval(timer)
+    }
   }, [])
-
-  const configured = Boolean(webchatInjectUrl || webchatConfigUrl)
 
   return (
     <section className={`chatbot-panel ${recovery ? 'recovery-chat-panel' : ''}`} aria-label={recovery ? 'Botpress recovery chatbot' : 'Botpress chatbot'}>
       <div className="webchat-box">
         <div className="webchat-loading">
-          <p>{ready ? (recovery ? 'RedFlag recovery guide is ready.' : 'RedFlag chatbot is ready.') : configured ? 'Loading RedFlag chatbot...' : 'Configure VITE_BOTPRESS_WEBCHAT_INJECT_URL and VITE_BOTPRESS_WEBCHAT_CONFIG_URL in Vercel to load webchat.'}</p>
+          <p>{ready ? (recovery ? 'RedFlag recovery guide is ready.' : 'RedFlag chatbot is ready.') : configured ? 'Loading RedFlag chatbot...' : 'Configure Botpress webchat environment variables in Vercel to load webchat.'}</p>
           <p className="form-note">{recovery ? 'Ask: I think I have been scammed.' : 'Ask about suspicious messages, scam warning signs, or what to do next.'}</p>
           <button className="btn btn-primary" type="button" onClick={() => window.botpress?.open?.()} disabled={!ready}>{recovery ? 'Open recovery chat' : 'Open RedFlag chat'}</button>
         </div>
