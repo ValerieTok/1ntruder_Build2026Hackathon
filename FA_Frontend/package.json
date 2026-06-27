@@ -5,7 +5,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": ["express", "ejs", "anti-scam"],
   "author": "",
