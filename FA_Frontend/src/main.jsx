@@ -487,48 +487,55 @@ function Alerts() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
   const [sort, setSort] = useState('recent')
+  const [selectedAlert, setSelectedAlert] = useState(null)
   const stats = getSummaryStats()
   const visibleAlerts = useMemo(() => {
     const riskOrder = { High: 3, Medium: 2, Low: 1 }
     return alerts
       .filter((alert) => !category || alert.category === category)
-      .filter((alert) => [alert.title, alert.category, alert.description, ...alert.warningSigns].join(' ').toLowerCase().includes(query.toLowerCase()))
+      .filter((alert) => [alert.title, alert.category, alert.description, ...alert.warningSigns, ...alert.recommendedActions].join(' ').toLowerCase().includes(query.toLowerCase()))
       .sort((a, b) => sort === 'risk' ? riskOrder[b.risk] - riskOrder[a.risk] : 0)
   }, [query, category, sort])
 
   return (
     <section className="scam-alerts-page">
       <div className="scam-alerts-hero"><p className="section-label">Scam alerts</p><h1>Latest Scam Alerts</h1><p>Stay informed about newly reported scams and learn how to protect yourself.</p></div>
-      <section className="scam-alerts-controls">
-        <article className="form-card">
-          <form>
-            <div className="two-column">
-              <label htmlFor="searchInput">Search</label>
-              <input id="searchInput" type="search" placeholder="Search scam title, category, or warning signs" value={query} onChange={(event) => setQuery(event.target.value)} />
-              <label htmlFor="categorySelect">Filter by scam category</label>
-              <select id="categorySelect" value={category} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select>
-              <label htmlFor="sortSelect">Sort by</label>
-              <select id="sortSelect" value={sort} onChange={(event) => setSort(event.target.value)}><option value="recent">Most Recent</option><option value="risk">Highest Risk</option></select>
-            </div>
-          </form>
-        </article>
-      </section>
       <section className="scam-alerts-stats">
         {[[stats.today, "Today's Alerts"], [stats.active, 'Active Scams'], [stats.highRisk, 'High Risk Alerts'], [stats.weekly, 'Reported This Week']].map(([value, label]) => <article className="stat-card" key={label}><strong>{value}</strong><span>{label}</span></article>)}
       </section>
-      <section className="alert-grid">
-        {visibleAlerts.map((alert) => (
-          <article className="alert-card-modern" key={alert.id}>
-            <div className="alert-card-content">
-              <div className="alert-card-badges">
-                <span className="alert-category-badge">{alert.category}</span>
-                <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
-              </div>
-              <h2 className="alert-card-title">{alert.title}</h2>
-              <p className="alert-card-date">Reported: {alert.reportedDate}</p>
-              <p>{alert.description}</p>
-              <div className="alert-lists"><div><strong>Warning Signs:</strong><ul>{alert.warningSigns.map((item) => <li key={item}>{item}</li>)}</ul></div><div><strong>Recommended Actions:</strong><ul>{alert.recommendedActions.map((item) => <li key={item}>{item}</li>)}</ul></div></div>
+      <section className="scam-alerts-controls">
+        <form>
+          <div className="alerts-search-row">
+            <div className="alerts-search-input">
+              <label className="sr-only" htmlFor="searchInput">Search</label>
+              <input id="searchInput" type="search" placeholder="Search scams..." autoComplete="off" value={query} onChange={(event) => setQuery(event.target.value)} />
             </div>
+            <div className="alerts-filters">
+              <select id="categorySelect" value={category} onChange={(event) => setCategory(event.target.value)} aria-label="Filter by scam category"><option value="">All categories</option>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select>
+              <select id="sortSelect" value={sort} onChange={(event) => setSort(event.target.value)} aria-label="Sort alerts"><option value="recent">Most Recent</option><option value="risk">Highest Risk</option></select>
+            </div>
+          </div>
+        </form>
+      </section>
+      <section className="alert-grid">
+        {visibleAlerts.length === 0 ? (
+          <div className="alerts-empty-state">No alerts found. Adjust your search or filters.</div>
+        ) : visibleAlerts.map((alert) => (
+          <article className="alert-card-modern" key={alert.id}>
+            <button className="alert-card-link" type="button" onClick={() => setSelectedAlert(alert)}>
+              <div className="alert-card-image">
+                <img src={alert.image} alt={alert.title} loading="lazy" />
+              </div>
+              <div className="alert-card-content">
+                <div className="alert-card-badges">
+                  <span className="alert-category-badge">{alert.category}</span>
+                  <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
+                </div>
+                <h2 className="alert-card-title">{alert.title}</h2>
+                <p className="alert-card-date">Reported: {alert.reportedDate}</p>
+                <span className="alert-read-more">Read More <span aria-hidden="true">-&gt;</span></span>
+              </div>
+            </button>
           </article>
         ))}
       </section>
@@ -536,7 +543,34 @@ function Alerts() {
         <section className="trends-panel"><h3>Latest Scam Trends</h3><ul className="trend-list">{trends.map((trend) => <li key={trend}>{trend}</li>)}</ul></section>
         <section className="tips-panel"><h3>Safety Tips</h3><ul className="tips-list">{safetyTips.map((tip) => <li key={tip}><span>✓</span> {tip}</li>)}</ul></section>
       </div>
+      {selectedAlert && <AlertDetailModal alert={selectedAlert} onClose={() => setSelectedAlert(null)} />}
     </section>
+  )
+}
+
+function AlertDetailModal({ alert, onClose }) {
+  return (
+    <div className="alert-detail-modal" onClick={(event) => event.target === event.currentTarget && onClose()}>
+      <div className="alert-detail-content">
+        <button className="alert-detail-close" type="button" onClick={onClose} aria-label="Close detail view">×</button>
+        <div className="alert-detail-body">
+          <img src={alert.image} alt={alert.title} className="alert-detail-image" />
+          <div className="alert-detail-header">
+            <div>
+              <h2 className="alert-detail-title">{alert.title}</h2>
+              <div className="alert-detail-meta">
+                <span>Reported: {alert.reportedDate}</span>
+                <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
+                <span className="alert-category-badge">{alert.category}</span>
+              </div>
+            </div>
+          </div>
+          <div className="alert-detail-section"><p>{alert.description}</p></div>
+          <div className="alert-detail-section"><h3>Warning Signs</h3><ul>{alert.warningSigns.map((item) => <li key={item}>{item}</li>)}</ul></div>
+          <div className="alert-detail-section"><h3>Recommended Actions</h3><ul>{alert.recommendedActions.map((item) => <li key={item}>{item}</li>)}</ul></div>
+        </div>
+      </div>
+    </div>
   )
 }
 
