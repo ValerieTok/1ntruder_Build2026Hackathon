@@ -20,7 +20,7 @@ function goBack(fallback = '/') {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-function Link({ href, className, children }) {
+function Link({ href, className, children, onNavigate }) {
   return (
     <a
       className={className}
@@ -29,12 +29,7 @@ function Link({ href, className, children }) {
         if (href.startsWith('/')) {
           event.preventDefault()
           navigate(href)
-          const hash = href.split('#')[1]
-          if (hash) {
-            requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
-          } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-          }
+          onNavigate?.()
         }
       }}
     >
@@ -63,6 +58,7 @@ function useRoute() {
 
 function Header({ currentPage }) {
   const [open, setOpen] = useState(false)
+  const closeNav = () => setOpen(false)
 
   useEffect(() => {
     setOpen(false)
@@ -71,17 +67,17 @@ function Header({ currentPage }) {
   return (
     <header className="site-header">
       <nav className="navbar" aria-label="Main navigation">
-        <Link className="brand" href="/">
+        <Link className="brand" href="/" onNavigate={closeNav}>
           <span className="brand-mark" aria-hidden="true">R</span>
           <span>RedFlag<small>Your AI-powered scam detection companion.</small></span>
         </Link>
-        <button className="nav-toggle" type="button" aria-label="Open navigation" onClick={() => setOpen((value) => !value)}>Menu</button>
+        <button className="nav-toggle" type="button" aria-label="Open navigation" aria-expanded={open} onClick={() => setOpen((value) => !value)}>Menu</button>
         <ul className={`nav-links ${open ? 'open' : ''}`}>
-          <li><Link className={currentPage === 'home' ? 'active' : ''} href="/">Home</Link></li>
-          <li><Link href="/#features">Features</Link></li>
-          <li><Link href="/#how-it-works">How It Works</Link></li>
-          <li><Link className={currentPage === 'chatbot' ? 'active' : ''} href="/chatbot?mode=recovery">Get Help</Link></li>
-          <li><Link className="nav-cta" href="/checker">Get Started</Link></li>
+          <li><Link className={currentPage === 'home' ? 'active' : ''} href="/" onNavigate={closeNav}>Home</Link></li>
+          <li><Link href="/#features" onNavigate={closeNav}>Features</Link></li>
+          <li><Link href="/#how-it-works" onNavigate={closeNav}>How It Works</Link></li>
+          <li><Link className={currentPage === 'chatbot' ? 'active' : ''} href="/chatbot?mode=recovery" onNavigate={closeNav}>Get Help</Link></li>
+          <li><Link className="nav-cta" href="/checker" onNavigate={closeNav}>Get Started</Link></li>
         </ul>
       </nav>
     </header>
@@ -643,6 +639,20 @@ function App() {
   useEffect(() => {
     document.body.className = `page-${currentPage}`
   }, [currentPage])
+
+  useEffect(() => {
+    const hash = route.split('#')[1]
+
+    if (hash) {
+      const targetId = decodeURIComponent(hash)
+      requestAnimationFrame(() => {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+      return
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [route])
 
   const page = path === '/' ? <Home /> : path === '/checker' ? <Checker /> : path === '/chatbot' ? <Chatbot /> : path === '/alerts' ? <Alerts /> : path.startsWith('/alerts/') ? <AlertArticlePage alertId={decodeURIComponent(path.split('/')[2] || '')} /> : path === '/about' ? <About /> : <NotFound />
 
