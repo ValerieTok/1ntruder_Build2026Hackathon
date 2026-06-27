@@ -6,8 +6,7 @@
     "articleHeadline": "Fake Bank SMS Scams Continue to Target Customers",
     "reportedDate": "Today",
     "readTime": "3 min read",
-    "views": 15342,
-    "author": "Scam Advisory Team",
+    "author": "RedFlag Research Team",
     "risk": "High",
     "category": "Banking",
     "description": "Scammers impersonate bank notifications and ask victims to click a fake login link.",
@@ -53,8 +52,16 @@
       ],
       "resources": [
         {
-          "label": "ScamShield",
+          "label": "ScamShield Singapore",
           "url": "https://www.scamshield.gov.sg/"
+        },
+        {
+          "label": "Singapore Police Force - Scam Advisories",
+          "url": "https://www.police.gov.sg/Advisories/Scams"
+        },
+        {
+          "label": "Cyber Security Agency of Singapore",
+          "url": "https://www.csa.gov.sg/"
         }
       ]
     }
@@ -66,8 +73,7 @@
     "articleHeadline": "Fake Recruiters Ask for Upfront Fees Before Interviews",
     "reportedDate": "Yesterday",
     "readTime": "4 min read",
-    "views": 10470,
-    "author": "Scam Advisory Team",
+    "author": "RedFlag Research Team",
     "risk": "Medium",
     "category": "Job",
     "description": "Fake job offers ask candidates to pay recruitment fees before scheduling interviews.",
@@ -113,8 +119,16 @@
       ],
       "resources": [
         {
-          "label": "Singapore Police Force",
-          "url": "https://www.police.gov.sg/"
+          "label": "ScamShield Singapore",
+          "url": "https://www.scamshield.gov.sg/"
+        },
+        {
+          "label": "Ministry of Manpower",
+          "url": "https://www.mom.gov.sg/"
+        },
+        {
+          "label": "Singapore Police Force - Scam Advisories",
+          "url": "https://www.police.gov.sg/Advisories/Scams"
         }
       ]
     }
@@ -126,8 +140,7 @@
     "articleHeadline": "Crypto Investment Scam Promises Guaranteed Returns",
     "reportedDate": "2 days ago",
     "readTime": "4 min read",
-    "views": 21450,
-    "author": "Scam Advisory Team",
+    "author": "RedFlag Research Team",
     "risk": "High",
     "category": "Investment",
     "description": "A social media ad promises quick crypto returns and asks users to fund a wallet.",
@@ -173,8 +186,16 @@
       ],
       "resources": [
         {
-          "label": "Cyber Security Agency",
-          "url": "https://www.csa.gov.sg/"
+          "label": "Monetary Authority of Singapore - Investor Alert List",
+          "url": "https://www.mas.gov.sg/investor-alert-list"
+        },
+        {
+          "label": "ScamShield Singapore",
+          "url": "https://www.scamshield.gov.sg/"
+        },
+        {
+          "label": "Singapore Police Force - Scam Advisories",
+          "url": "https://www.police.gov.sg/Advisories/Scams"
         }
       ]
     }
