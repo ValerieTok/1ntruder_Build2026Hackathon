@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 }
 
 async function analyzeMessage(message) {
-  const webhookId = process.env.BOTPRESS_WEBHOOK_ID?.trim()
+  const webhookId = normalizeWebhookId(process.env.BOTPRESS_WEBHOOK_ID)
 
   if (!webhookId) {
     throw new Error('BOTPRESS_WEBHOOK_ID missing.')
@@ -43,6 +43,22 @@ async function analyzeMessage(message) {
   }
 
   return normalizeAnalysis(parsed)
+}
+
+function normalizeWebhookId(value) {
+  const raw = String(value || '').trim()
+  if (!raw) return ''
+
+  try {
+    const url = new URL(raw)
+    if (url.hostname === 'webhook.botpress.cloud') {
+      return url.pathname.split('/').filter(Boolean).pop() || ''
+    }
+  } catch {
+    // Not a URL; assume the raw value is already the webhook ID.
+  }
+
+  return raw
 }
 
 async function sendPrompt(client, text) {

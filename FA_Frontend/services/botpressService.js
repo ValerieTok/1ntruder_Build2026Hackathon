@@ -3,13 +3,29 @@ const JSON5 = require("json5");
 const DEFAULT_TIMEOUT_MS = 15000;
 
 function getBotpressConfig() {
-  const webhookId = process.env.BOTPRESS_WEBHOOK_ID?.trim();
+  const webhookId = normalizeWebhookId(process.env.BOTPRESS_WEBHOOK_ID);
 
   if (!webhookId) {
     throw new Error("BOTPRESS_WEBHOOK_ID missing.");
   }
 
   return { webhookId };
+}
+
+function normalizeWebhookId(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+
+  try {
+    const url = new URL(raw);
+    if (url.hostname === "webhook.botpress.cloud") {
+      return url.pathname.split("/").filter(Boolean).pop() || "";
+    }
+  } catch {
+    // Not a URL; assume the raw value is already the webhook ID.
+  }
+
+  return raw;
 }
 
 async function analyzeMessage(message) {
