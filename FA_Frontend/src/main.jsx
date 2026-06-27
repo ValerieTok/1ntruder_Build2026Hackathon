@@ -260,18 +260,15 @@ function BotpressPanel({ recovery = false }) {
       setConfigured(urls.length > 0)
 
       for (const src of urls) {
-        if (document.querySelector(`script[src="${src}"]`)) continue
-        const script = document.createElement('script')
-        script.src = src
-        script.defer = true
-        document.body.appendChild(script)
+        await loadScript(src)
+        if (cancelled) return
       }
     }
 
     loadWebchat()
 
     const timer = setInterval(() => {
-      if (window.botpress?.open) setReady(true)
+      if (window.botpress?.open || window.botpress?.toggle || window.botpress?.sendEvent) setReady(true)
     }, 250)
 
     return () => {
@@ -280,17 +277,64 @@ function BotpressPanel({ recovery = false }) {
     }
   }, [])
 
+  function openChat() {
+    const botpress = window.botpress
+    if (!botpress) return
+
+    if (typeof botpress.open === 'function') {
+      botpress.open()
+      return
+    }
+
+    if (typeof botpress.toggle === 'function') {
+      botpress.toggle()
+      return
+    }
+
+    if (typeof botpress.sendEvent === 'function') {
+      botpress.sendEvent({ type: 'show' })
+      botpress.sendEvent({ type: 'open' })
+    }
+  }
+
   return (
     <section className={`chatbot-panel ${recovery ? 'recovery-chat-panel' : ''}`} aria-label={recovery ? 'Botpress recovery chatbot' : 'Botpress chatbot'}>
       <div className="webchat-box">
         <div className="webchat-loading">
           <p>{ready ? (recovery ? 'RedFlag recovery guide is ready.' : 'RedFlag chatbot is ready.') : configured ? 'Loading RedFlag chatbot...' : 'Configure Botpress webchat environment variables in Vercel to load webchat.'}</p>
           <p className="form-note">{recovery ? 'Ask: I think I have been scammed.' : 'Ask about suspicious messages, scam warning signs, or what to do next.'}</p>
-          <button className="btn btn-primary" type="button" onClick={() => window.botpress?.open?.()} disabled={!ready}>{recovery ? 'Open recovery chat' : 'Open RedFlag chat'}</button>
+          <button className="btn btn-primary" type="button" onClick={openChat} disabled={!ready}>{recovery ? 'Open recovery chat' : 'Open RedFlag chat'}</button>
         </div>
       </div>
     </section>
   )
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`)
+
+    if (existing?.dataset.loaded === 'true') {
+      resolve()
+      return
+    }
+
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true })
+      existing.addEventListener('error', reject, { once: true })
+      return
+    }
+
+    const script = document.createElement('script')
+    script.src = src
+    script.async = false
+    script.addEventListener('load', () => {
+      script.dataset.loaded = 'true'
+      resolve()
+    }, { once: true })
+    script.addEventListener('error', reject, { once: true })
+    document.body.appendChild(script)
+  })
 }
 
 function Chatbot() {
