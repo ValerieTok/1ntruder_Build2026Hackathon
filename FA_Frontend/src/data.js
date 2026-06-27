@@ -16,14 +16,6 @@ export const features = [
     action: 'Check now',
   },
   {
-    title: 'Link checker',
-    description: 'Check suspicious links before clicking and understand the risks behind them.',
-    link: '/checker',
-    icon: 'link',
-    tone: 'blue',
-    action: 'Check link',
-  },
-  {
     title: 'Recovery guide',
     description: 'Get practical, step-by-step guidance when you think you have been scammed.',
     link: '/chatbot?mode=recovery',
