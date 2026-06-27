@@ -5,7 +5,8 @@ const sortSelect = document.getElementById("sortSelect");
 const detailModal = document.getElementById("alertDetailModal");
 const detailBody = document.getElementById("alertDetailBody");
 const detailClose = document.querySelector(".alert-detail-close");
-const rawAlerts = window.__ALERTS_DATA__ || [];
+let rawAlerts = [];
+const fallbackAlerts = window.__ALERTS_DATA__ || [];
 
 const riskOrder = { High: 0, Medium: 1, Low: 2 };
 
@@ -17,6 +18,7 @@ function createAlertCard(alert) {
   card.dataset.title = alert.title;
   card.dataset.description = alert.description;
   card.dataset.id = alert.id;
+  card.dataset.slug = alert.slug || alert.id;
 
   const imageHtml = `<div class="alert-card-image"><img src="${alert.image}" alt="${alert.title}" loading="lazy"></div>`;
 
@@ -40,38 +42,63 @@ function createAlertCard(alert) {
   return card;
 }
 
-function renderDetailModal(alert) {
+function showDetailLoading() {
+  detailBody.innerHTML = `
+    <div class="alert-detail-loading">
+      <span class="loading-spinner" aria-hidden="true"></span>
+      <span>Loading alert details...</span>
+    </div>
+  `;
+  detailModal.style.display = "flex";
+}
+
+async function renderDetailModal(alert) {
+  const alertSlug = alert.slug || alert.id;
+  let detailAlert = alert;
+
+  showDetailLoading();
+
+  try {
+    const response = await fetch(`/api/scam-alerts/${encodeURIComponent(alertSlug)}`);
+    if (response.ok) {
+      detailAlert = await response.json();
+    } else {
+      console.warn(`Detail API returned ${response.status}, using local alert data.`);
+    }
+  } catch (error) {
+    console.warn('Could not fetch alert detail from API:', error.message);
+  }
+
   const detailHtml = `
-    <img src="${alert.image}" alt="${alert.title}" class="alert-detail-image">
+    <img src="${detailAlert.image}" alt="${detailAlert.title}" class="alert-detail-image">
     <div class="alert-detail-header">
       <div>
-        <h2 class="alert-detail-title">${alert.title}</h2>
+        <h2 class="alert-detail-title">${detailAlert.title}</h2>
         <div class="alert-detail-meta">
-          <span>Reported: ${alert.reportedDate}</span>
-          <span class="alert-risk-badge ${alert.risk.toLowerCase()}">${alert.risk} Risk</span>
-          <span class="alert-category-badge">${alert.category}</span>
+          <span>Reported: ${detailAlert.reportedDate}</span>
+          <span class="alert-risk-badge ${detailAlert.risk.toLowerCase()}">${detailAlert.risk} Risk</span>
+          <span class="alert-category-badge">${detailAlert.category}</span>
         </div>
       </div>
     </div>
     <div class="alert-detail-section">
-      <p>${alert.description}</p>
+      <p>${detailAlert.description}</p>
     </div>
     <div class="alert-detail-section">
       <h3>Warning Signs</h3>
       <ul>
-        ${alert.warningSigns.map((sign) => `<li>${sign}</li>`).join("")}
+        ${ (Array.isArray(detailAlert.warningSigns) ? detailAlert.warningSigns : []).map((sign) => `<li>${sign}</li>`).join("") }
       </ul>
     </div>
     <div class="alert-detail-section">
       <h3>Recommended Actions</h3>
       <ul>
-        ${alert.recommendedActions.map((action) => `<li>${action}</li>`).join("")}
+        ${ (Array.isArray(detailAlert.recommendedActions) ? detailAlert.recommendedActions : []).map((action) => `<li>${action}</li>`).join("") }
       </ul>
     </div>
   `;
 
   detailBody.innerHTML = detailHtml;
-  detailModal.style.display = "flex";
 }
 
 function closeDetailModal() {
@@ -85,7 +112,9 @@ function filterAlerts() {
 
   const filtered = rawAlerts
     .filter((alert) => {
-      const text = [alert.title, alert.category, alert.description, ...alert.warningSigns, ...alert.recommendedActions].join(" ").toLowerCase();
+      const warningSigns = Array.isArray(alert.warningSigns) ? alert.warningSigns : [];
+      const recommendedActions = Array.isArray(alert.recommendedActions) ? alert.recommendedActions : [];
+      const text = [alert.title, alert.category, alert.description, ...warningSigns, ...recommendedActions].join(" ").toLowerCase();
       const matchesSearch = !query || text.includes(query);
       const matchesCategory = !category || alert.category === category;
       return matchesSearch && matchesCategory;
@@ -117,6 +146,22 @@ function filterAlerts() {
   });
 }
 
+async function loadAlerts() {
+  try {
+    const response = await fetch('/api/scam-alerts');
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`);
+    }
+    const payload = await response.json();
+    rawAlerts = Array.isArray(payload.alerts) ? payload.alerts : [];
+  } catch (error) {
+    console.warn('Could not fetch /api/scam-alerts, falling back to inline data:', error.message);
+    rawAlerts = fallbackAlerts;
+  }
+
+  filterAlerts();
+}
+
 if (alertsGrid && searchInput && categorySelect && sortSelect) {
   searchInput.addEventListener("input", filterAlerts);
   categorySelect.addEventListener("change", filterAlerts);
@@ -134,5 +179,5 @@ if (alertsGrid && searchInput && categorySelect && sortSelect) {
     });
   }
 
-  filterAlerts();
+  loadAlerts();
 }
