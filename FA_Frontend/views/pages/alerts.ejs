@@ -1,80 +1,163 @@
 <section class="scam-alerts-page">
+
   <div class="scam-alerts-hero">
-    <p class="section-label">Scam alerts</p>
+    <p class="section-label">Scam Alerts</p>
     <h1>Latest Scam Alerts</h1>
     <p>Stay informed about newly reported scams and learn how to protect yourself.</p>
   </div>
 
+  <!-- Statistics -->
   <section class="scam-alerts-stats">
+
     <article class="stat-card">
-      <strong><%= stats.today %></strong>
+      <strong><%= stats ? stats.today : 0 %></strong>
       <span>Today's Alerts</span>
     </article>
+
     <article class="stat-card">
-      <strong><%= stats.active %></strong>
+      <strong><%= stats ? stats.active : 0 %></strong>
       <span>Active Scams</span>
     </article>
+
     <article class="stat-card">
-      <strong><%= stats.highRisk %></strong>
+      <strong><%= stats ? stats.highRisk : 0 %></strong>
       <span>High Risk Alerts</span>
     </article>
+
     <article class="stat-card">
-      <strong><%= stats.weekly %></strong>
+      <strong><%= stats ? stats.weekly : 0 %></strong>
       <span>Reported This Week</span>
     </article>
+
   </section>
 
+  <!-- Search -->
   <section class="scam-alerts-controls">
+
     <form id="alertsFilterForm">
+
       <div class="alerts-search-row">
+
         <div class="alerts-search-input">
-          <label for="searchInput" style="display: none;">Search</label>
-          <input id="searchInput" type="search" placeholder="Search scams..." autocomplete="off">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search scams..."
+            autocomplete="off">
         </div>
+
         <div class="alerts-filters">
-          <select id="categorySelect" aria-label="Filter by scam category">
+
+          <select id="categorySelect">
+
             <option value="">All Categories</option>
-            <% categories.forEach((category) => { %>
-              <option value="<%= category %>"><%= category %></option>
+
+            <% (categories || []).forEach(function(category){ %>
+
+              <option value="<%= category %>">
+                <%= category %>
+              </option>
+
             <% }) %>
+
           </select>
-          <select id="sortSelect" aria-label="Sort alerts">
-            <option value="recent">Most Recent</option>
-            <option value="risk">Highest Risk</option>
+
+          <select id="sortSelect">
+
+            <option value="recent">
+              Most Recent
+            </option>
+
+            <option value="risk">
+              Highest Risk
+            </option>
+
           </select>
+
         </div>
+
       </div>
+
     </form>
+
   </section>
 
-  <section class="alert-grid" id="alertsGrid">
-    <% alerts.forEach((alert) => { %>
-      <article class="alert-card-modern" data-category="<%= alert.category %>" data-risk="<%= alert.risk %>" data-title="<%= alert.title %>" data-description="<%= alert.description %>" data-id="<%= alert.id %>">
-        <div class="alert-card-image">
-          <img src="<%= alert.image %>" alt="<%= alert.title %>" loading="lazy">
-        </div>
-        <div class="alert-card-content">
-          <div class="alert-card-badges">
-            <span class="alert-category-badge"><%= alert.category %></span>
-            <span class="alert-risk-badge <%= alert.risk.toLowerCase() %>"><%= alert.risk %> Risk</span>
+  <!-- Cards -->
+  <section
+    class="alert-grid"
+    id="alertsGrid">
+
+    <% (alerts || []).forEach(function(alert){ %>
+
+      <article
+        class="alert-card-modern"
+        data-category="<%= alert.category %>"
+        data-risk="<%= alert.risk %>"
+        data-title="<%= alert.title %>"
+        data-description="<%= alert.description %>"
+        data-id="<%= alert.id %>"
+        data-slug="<%= alert.slug || alert.id %>">
+
+        <a
+          class="alert-card-link"
+          href="/alerts/<%= alert.slug || alert.id %>">
+
+          <div class="alert-card-image">
+
+            <img
+              src="<%= alert.image || 'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?auto=format&fit=crop&w=900&q=80' %>"
+              alt="<%= alert.title %>"
+              loading="lazy">
+
           </div>
-          <h2 class="alert-card-title"><%= alert.title %></h2>
-          <p class="alert-card-date">Reported: <%= alert.reportedDate %></p>
-          <a class="alert-read-more" href="/alerts/<%= alert.slug || alert.id %>">Read More <span aria-hidden="true">→</span></a>
-        </div>
+
+          <div class="alert-card-content">
+
+            <div class="alert-card-badges">
+
+              <span class="alert-category-badge">
+                <%= alert.category %>
+              </span>
+
+              <span class="alert-risk-badge <%= (alert.risk || 'Low').toLowerCase() %>">
+
+                <%= alert.risk || 'Low' %> Risk
+
+              </span>
+
+            </div>
+
+            <h2 class="alert-card-title">
+              <%= alert.title %>
+            </h2>
+
+            <p class="alert-card-date">
+              Reported:
+              <%= alert.reportedDate %>
+            </p>
+
+            <span class="alert-read-more">
+
+              Read More →
+
+            </span>
+
+          </div>
+
+        </a>
+
       </article>
+
     <% }) %>
+
   </section>
 
-  <div id="alertDetailModal" class="alert-detail-modal" style="display: none;">
-    <div class="alert-detail-content">
-      <button class="alert-detail-close" aria-label="Close detail view" type="button">&times;</button>
-      <div id="alertDetailBody"></div>
-    </div>
-  </div>
-
-  <script>
-    window.__ALERTS_DATA__ = <%- JSON.stringify(alerts) %>;
-  </script>
-  <script src="/js/alerts.js"></script>
 </section>
+
+<script>
+
+window.__ALERTS_DATA__ = [];
+
+</script>
+
+<script src="/js/alerts.js"></script>
