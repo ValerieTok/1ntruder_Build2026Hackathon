@@ -1,0 +1,7 @@
+{
+  "name": "sparklebot-scam-intruder",
+  "private": true,
+  "scripts": {
+    "build": "npm install --prefix FA_Frontend && npm run build --prefix FA_Frontend"
+  }
+}
