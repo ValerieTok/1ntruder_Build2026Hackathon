@@ -2,43 +2,24 @@ import type { Alert } from "./types";
 
 interface AlertCardProps {
   alert: Alert;
+  onReadMore: (alert: Alert) => void;
 }
 
-export function AlertCard({ alert }: AlertCardProps) {
+export function AlertCard({ alert, onReadMore }: AlertCardProps) {
   return (
-    <article className="alert-card">
-      <div className="alert-card-header">
-        <div>
-          <h2 className="alert-title">{alert.title}</h2>
-          <p className="alert-metadata">Reported: {alert.reportedDate}</p>
-        </div>
-        <span className={`status-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
+    <article className="alert-card-modern">
+      <div className="alert-card-image">
+        <img src={alert.image} alt={alert.title} loading="lazy" />
       </div>
-      <div className="alert-category">{alert.category}</div>
-      <div className="alert-copy">
-        <p>{alert.description}</p>
-      </div>
-      <div className="alert-lists">
-        <div>
-          <strong>Warning Signs:</strong>
-          <ul>
-            {alert.warningSigns.map((sign) => (
-              <li key={sign}>{sign}</li>
-            ))}
-          </ul>
+      <div className="alert-card-content">
+        <div className="alert-card-badges">
+          <span className="alert-category-badge">{alert.category}</span>
+          <span className={`alert-risk-badge ${alert.risk.toLowerCase()}`}>{alert.risk} Risk</span>
         </div>
-        <div>
-          <strong>Recommended Actions:</strong>
-          <ul>
-            {alert.recommendedActions.map((action) => (
-              <li key={action}>{action}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="alert-actions">
-        <button type="button" className="alert-button">
-          Read More
+        <h2 className="alert-card-title">{alert.title}</h2>
+        <p className="alert-card-date">Reported: {alert.reportedDate}</p>
+        <button className="alert-read-more" type="button" onClick={() => onReadMore(alert)}>
+          Read More <span aria-hidden="true">→</span>
         </button>
       </div>
     </article>

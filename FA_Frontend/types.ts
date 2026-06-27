@@ -5,6 +5,7 @@ export interface Alert {
   risk: "High" | "Medium" | "Low";
   category: string;
   description: string;
+  image: string;
   warningSigns: string[];
   recommendedActions: string[];
 }

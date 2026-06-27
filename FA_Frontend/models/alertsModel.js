@@ -1,11 +1,13 @@
 const alerts = [
   {
     id: "alert-1",
-    title: "Fake DBS SMS",
+    title: "Fake Bank SMS",
     reportedDate: "Today",
     risk: "High",
     category: "Banking",
     description: "Scammers impersonate DBS and ask users to click a fake login link.",
+    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=450&fit=crop",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&h=280&fit=crop",
     warningSigns: [
       "Urgent payment request",
       "Suspicious link",
@@ -23,6 +25,7 @@ const alerts = [
     reportedDate: "Yesterday",
     risk: "Medium",
     category: "Job",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=450&fit=crop",
     description: "Fake recruiters ask for upfront fees before offering a job interview.",
     warningSigns: [
       "Fee requested before interview",
@@ -40,6 +43,7 @@ const alerts = [
     title: "Crypto Investment Pitch",
     reportedDate: "2 days ago",
     risk: "High",
+    image: "https://images.unsplash.com/photo-1621761191319-c6fb62b63ef5?w=800&h=450&fit=crop",
     category: "Investment",
     description: "A social media ad promises quick crypto returns and asks users to fund a wallet.",
     warningSigns: [
@@ -58,6 +62,7 @@ const alerts = [
     title: "Romance Scam Offer",
     reportedDate: "3 days ago",
     risk: "High",
+    image: "https://images.unsplash.com/photo-1516534775068-bb57ce47b2d5?w=800&h=450&fit=crop",
     category: "Romance",
     description: "A new match asks for money to cover an emergency or travel expenses.",
     warningSigns: [
@@ -75,6 +80,7 @@ const alerts = [
     id: "alert-5",
     title: "Fake Parcel Delivery Alert",
     reportedDate: "4 days ago",
+    image: "https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=800&h=450&fit=crop",
     risk: "Medium",
     category: "Delivery",
     description: "An SMS claims there is a package issue and directs recipients to a fraudulent tracking link.",
@@ -93,6 +99,7 @@ const alerts = [
     id: "alert-6",
     title: "Bank App Login Scam",
     reportedDate: "5 days ago",
+    image: "https://images.unsplash.com/photo-1563986768609-322510e8f26b?w=800&h=450&fit=crop",
     risk: "High",
     category: "Phishing",
     description: "A fake bank login page is shared through a message asking for credentials.",
@@ -110,6 +117,7 @@ const alerts = [
   {
     id: "alert-7",
     title: "Social Media Giveaway Scam",
+    image: "https://images.unsplash.com/photo-1611262588024-d12430b98920?w=800&h=450&fit=crop",
     reportedDate: "6 days ago",
     risk: "Low",
     category: "Social Media",
@@ -128,6 +136,7 @@ const alerts = [
   {
     id: "alert-8",
     title: "Rental Deposit Scam",
+    image: "https://images.unsplash.com/photo-1560448204-e02f7cbb8f0c?w=800&h=450&fit=crop",
     reportedDate: "Last week",
     risk: "Medium",
     category: "Others",

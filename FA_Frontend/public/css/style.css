@@ -892,7 +892,7 @@ textarea {
 .icon-alerts::before { content: "\26A0"; }
 
 .scam-alerts-page {
-  max-width: 1180px;
+  max-width: 1220px;
   margin: 0 auto;
   padding: 56px 20px 72px;
 }
@@ -906,46 +906,58 @@ textarea {
   margin-bottom: 18px;
 }
 .scam-alerts-hero p { margin: 0 auto; max-width: 620px; color: var(--grey-700); font-size: 1rem; line-height: 1.7; }
-.scam-alerts-controls .form-card { padding: 24px; }
-.scam-alerts-controls form { display: grid; gap: 18px; }
-.scam-alerts-controls label { margin-bottom: 10px; }
-.scam-alerts-controls input,
-.scam-alerts-controls select { border-color: #d6dce8; }
-.scam-alerts-controls .two-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.scam-alerts-stats { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 18px; margin: 36px 0 28px; }
-.stat-card { padding: 24px; border-radius: 16px; background: white; border: 1px solid #e7edf7; box-shadow: 0 12px 30px rgba(20, 35, 80, 0.05); }
-.stat-card strong { display: block; font-size: 2rem; margin-bottom: 10px; }
-.stat-card span { color: #64748b; }
-.alert-grid { display: grid; gap: 20px; margin-top: 20px; }
-.alert-card { display: grid; gap: 16px; padding: 26px; border-radius: 20px; border: 1px solid #e5e9f1; background: #fff; box-shadow: 0 16px 34px rgba(24, 42, 82, 0.06); transition: transform 180ms ease, box-shadow 180ms ease; }
-.alert-card:hover { transform: translateY(-3px); box-shadow: 0 22px 42px rgba(24, 42, 82, 0.09); }
-.alert-card-header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.alert-title { font-size: 1.15rem; margin: 0; }
-.status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; font-weight: 800; font-size: 0.85rem; }
-.status-badge.high { background: rgba(239, 68, 68, 0.12); color: #b91c1c; }
-.status-badge.medium { background: rgba(249, 115, 22, 0.12); color: #c2410c; }
-.status-badge.low { background: rgba(34, 197, 94, 0.12); color: #15803d; }
-.alert-metadata { display: flex; flex-wrap: wrap; gap: 12px; color: #52606d; font-size: 0.9rem; }
-.alert-category { display: inline-flex; padding: 8px 12px; border-radius: 999px; background: #eef2ff; color: #333d78; font-size: 0.83rem; font-weight: 700; }
-.alert-copy p { margin: 0; color: #536176; line-height: 1.7; }
-.alert-lists { display: grid; gap: 16px; }
-.alert-lists ul { margin: 0; padding-left: 20px; color: #4d586b; line-height: 1.65; }
-.alert-lists li { margin-bottom: 8px; }
-.alert-actions { display: flex; justify-content: flex-end; }
-.alert-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 12px; background: #1d4ed8; color: white; font-weight: 800; text-decoration: none; transition: background 180ms ease; }
-.alert-button:hover { background: #2563eb; }
-.scam-alerts-lower { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 20px; margin-top: 40px; }
-.trends-panel,
-.tips-panel { padding: 24px; border-radius: 20px; background: white; border: 1px solid #e7edf7; box-shadow: 0 14px 32px rgba(24, 42, 82, 0.06); }
-.trends-panel h3,
-.tips-panel h3 { margin-top: 0; }
-.trend-list,
-.tips-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
-.trend-list li,
-.tips-list li { padding-left: 22px; position: relative; color: #4b5563; line-height: 1.65; }
-.trend-list li::before,
-.tips-list li::before { content: "•"; position: absolute; left: 0; color: #2563eb; font-size: 1.25rem; line-height: 1; }
-.tips-list li span { font-weight: 700; }
+.scam-alerts-stats { display: grid; grid-template-columns: repeat(4, minmax(200px, 1fr)); gap: 16px; margin: 42px 0 36px; }
+.stat-card { padding: 22px; border-radius: 16px; background: white; border: 1px solid #e7edf7; box-shadow: 0 10px 24px rgba(20, 35, 80, 0.05); text-align: center; }
+.stat-card strong { display: block; font-size: 2.4rem; margin-bottom: 8px; color: #1f2937; }
+.stat-card span { color: #64748b; font-size: 0.95rem; }
+.scam-alerts-controls { margin-bottom: 32px; }
+.alerts-search-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; align-items: end; }
+.alerts-search-input input { width: 100%; padding: 12px 16px; border: 1px solid #d6dce8; border-radius: 12px; font-size: 0.95rem; }
+.alerts-filters { display: flex; gap: 12px; }
+.alerts-filters select { flex: 1; padding: 12px 14px; border: 1px solid #d6dce8; border-radius: 12px; font-size: 0.93rem; background: white; }
+.alert-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 32px 0; }
+.alert-card-modern { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: white; border: 1px solid #e5e9f1; box-shadow: 0 10px 28px rgba(24, 42, 82, 0.05); transition: transform 160ms ease, box-shadow 160ms ease; cursor: pointer; }
+.alert-card-modern:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(24, 42, 82, 0.12); }
+.alert-card-image { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #f0f4f8; border-radius: 18px 18px 0 0; }
+.alert-card-image img { width: 100%; height: 100%; object-fit: cover; }
+.alert-card-content { display: flex; flex-direction: column; padding: 18px; flex: 1; }
+.alert-card-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.alert-category-badge { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: #eef2ff; color: #333d78; font-size: 0.78rem; font-weight: 700; }
+.alert-risk-badge { display: inline-flex; padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 800; width: fit-content; }
+.alert-risk-badge.high { background: rgba(239, 68, 68, 0.15); color: #b91c1c; }
+.alert-risk-badge.medium { background: rgba(249, 115, 22, 0.15); color: #c2410c; }
+.alert-risk-badge.low { background: rgba(34, 197, 94, 0.15); color: #15803d; }
+.alert-card-title { font-size: 1.1rem; font-weight: 800; margin: 8px 0; color: #1f2937; line-height: 1.4; }
+.alert-card-date { font-size: 0.85rem; color: #64748b; margin: 4px 0 auto; }
+.alert-read-more { width: 100%; margin-top: 14px; padding: 12px 16px; border: none; border-radius: 12px; background: #2563eb; color: white; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: background 160ms ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.alert-read-more:hover { background: #1d4ed8; }
+.alert-detail-modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+.alert-detail-content { position: relative; background: white; border-radius: 20px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(15, 23, 42, 0.3); }
+.alert-detail-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border: none; background: #f3f4f6; border-radius: 999px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #1f2937; transition: background 160ms ease; z-index: 10; }
+.alert-detail-close:hover { background: #e5e7eb; }
+.alert-detail-body { padding: 40px; }
+.alert-detail-image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; margin-bottom: 30px; }
+.alert-detail-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.alert-detail-title { font-size: 2rem; margin: 0 0 8px; color: #1f2937; }
+.alert-detail-meta { display: flex; gap: 20px; font-size: 0.95rem; color: #64748b; }
+.alert-detail-section { margin-bottom: 28px; }
+.alert-detail-section h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; color: #1f2937; }
+.alert-detail-section ul { margin: 0; padding-left: 20px; }
+.alert-detail-section li { margin-bottom: 8px; color: #4b5563; line-height: 1.6; }
+@media (max-width: 1024px) {
+  .alert-grid { grid-template-columns: repeat(2, 1fr); }
+  .alerts-search-row { grid-template-columns: 1fr; }
+  .alerts-filters { width: 100%; }
+  .alerts-filters select { width: 100%; }
+}
+@media (max-width: 640px) {
+  .alert-grid { grid-template-columns: 1fr; }
+  .scam-alerts-stats { grid-template-columns: 1fr; }
+  .alert-card-content { padding: 16px; }
+  .alert-card-title { font-size: 1rem; }
+  .alert-detail-body { padding: 24px 20px; }
+  .alert-detail-title { font-size: 1.5rem; }
+}
 @media (max-width: 960px) {
   .redflag-feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .scam-alerts-stats { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
