@@ -178,7 +178,7 @@ function Checker() {
     <section className="checker-page">
       <div className="checker-heading">
         <h1>Scam detector</h1>
-        <p>Paste text, check a link, or upload a screenshot preview. Text and links are analysed by the connected Botpress checker.</p>
+        <p>Paste text, check a link, or upload a screenshot preview. Text and links are analysed by OpenAI for scam signals.</p>
       </div>
       <div className="checker-layout">
         <form className="form-card checker-form" onSubmit={submit}>
