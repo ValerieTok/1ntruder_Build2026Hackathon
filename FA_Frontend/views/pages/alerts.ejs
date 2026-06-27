@@ -1,0 +1,115 @@
+<section class="scam-alerts-page">
+  <div class="scam-alerts-hero">
+    <p class="section-label">Scam alerts</p>
+    <h1>Latest Scam Alerts</h1>
+    <p>Stay informed about newly reported scams and learn how to protect yourself.</p>
+  </div>
+
+  <section class="scam-alerts-controls">
+    <article class="form-card">
+      <form id="alertsFilterForm">
+        <div class="two-column">
+          <label for="searchInput">Search</label>
+          <input id="searchInput" type="search" placeholder="Search scam title, category, or warning signs" autocomplete="off">
+
+          <label for="categorySelect">Filter by scam category</label>
+          <select id="categorySelect" aria-label="Filter by scam category">
+            <option value="">All categories</option>
+            <% categories.forEach((category) => { %>
+              <option value="<%= category %>"><%= category %></option>
+            <% }) %>
+          </select>
+
+          <label for="sortSelect">Sort by</label>
+          <select id="sortSelect" aria-label="Sort alerts">
+            <option value="recent">Most Recent</option>
+            <option value="risk">Highest Risk</option>
+          </select>
+        </div>
+      </form>
+    </article>
+  </section>
+
+  <section class="scam-alerts-stats">
+    <article class="stat-card">
+      <strong><%= stats.today %></strong>
+      <span>Today's Alerts</span>
+    </article>
+    <article class="stat-card">
+      <strong><%= stats.active %></strong>
+      <span>Active Scams</span>
+    </article>
+    <article class="stat-card">
+      <strong><%= stats.highRisk %></strong>
+      <span>High Risk Alerts</span>
+    </article>
+    <article class="stat-card">
+      <strong><%= stats.weekly %></strong>
+      <span>Reported This Week</span>
+    </article>
+  </section>
+
+  <section class="alert-grid" id="alertsGrid">
+    <% alerts.forEach((alert) => { %>
+      <article class="alert-card" data-category="<%= alert.category %>" data-risk="<%= alert.risk %>" data-title="<%= alert.title %>" data-description="<%= alert.description %>">
+        <div class="alert-card-header">
+          <div>
+            <h2 class="alert-title"><%= alert.title %></h2>
+            <p class="alert-metadata"><span>Reported: <%= alert.reportedDate %></span></p>
+          </div>
+          <span class="status-badge <%= alert.risk.toLowerCase() %>"><%= alert.risk %> Risk</span>
+        </div>
+        <div class="alert-category"><%= alert.category %></div>
+        <div class="alert-copy">
+          <p><%= alert.description %></p>
+        </div>
+        <div class="alert-lists">
+          <div>
+            <strong>Warning Signs:</strong>
+            <ul>
+              <% alert.warningSigns.forEach((sign) => { %>
+                <li><%= sign %></li>
+              <% }) %>
+            </ul>
+          </div>
+          <div>
+            <strong>Recommended Actions:</strong>
+            <ul>
+              <% alert.recommendedActions.forEach((action) => { %>
+                <li><%= action %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+        <div class="alert-actions">
+          <a class="alert-button" href="#">Read More</a>
+        </div>
+      </article>
+    <% }) %>
+  </section>
+
+  <div class="scam-alerts-lower">
+    <section class="trends-panel">
+      <h3>Latest Scam Trends</h3>
+      <ul class="trend-list">
+        <% trends.forEach((trend) => { %>
+          <li><%= trend %></li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <section class="tips-panel">
+      <h3>Safety Tips</h3>
+      <ul class="tips-list">
+        <% safetyTips.forEach((tip) => { %>
+          <li><span>✓</span> <%= tip %></li>
+        <% }) %>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    window.__ALERTS_DATA__ = <%- JSON.stringify(alerts) %>;
+  </script>
+  <script src="/js/alerts.js"></script>
+</section>

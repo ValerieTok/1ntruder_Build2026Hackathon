@@ -3,6 +3,7 @@ const homeController = require("../controllers/homeController");
 const checkerController = require("../controllers/checkerController");
 const uploadController = require("../controllers/uploadController");
 const chatbotController = require("../controllers/chatbotController");
+const scamAlertsController = require("../controllers/scamAlertsController");
 const aboutController = require("../controllers/aboutController");
 const upload = require("../middleware/imageUpload");
 
@@ -23,6 +24,7 @@ router.post("/checker", (req, res) => {
 });
 router.get("/upload", uploadController.showUpload);
 router.get("/chatbot", chatbotController.showChatbot);
+router.get("/alerts", scamAlertsController.showAlerts);
 router.get("/about", aboutController.showAbout);
 
 module.exports = router;

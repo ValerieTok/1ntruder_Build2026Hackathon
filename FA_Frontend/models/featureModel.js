@@ -30,6 +30,14 @@ const features = [
     icon: "recovery",
     tone: "green",
     action: "Get help"
+  },
+  {
+    title: "Scam Alerts",
+    description: "Stay updated with the latest scam trends and receive timely warnings about emerging threats.",
+    link: "/alerts",
+    icon: "alerts",
+    tone: "red",
+    action: "View Alerts"
   }
 ];
 
